@@ -1,0 +1,55 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+
+    <section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 offset-md-3 text-center">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="form-group">
+                                <img src="{% static 'KabasisWebApp/img/logo_original.png' %}"
+                                    alt="Descripción de la imagen" style="width: 200px; height: 150px;">
+                                <p style="color: #E5929E; font-weight: 600; font-size: 20px;">Construyendo human firewal
+                                    en tu organizacion</p>
+                            </div>
+                            <hr>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {{ form | crispy }}
+                                {% if form.captcha.errors %}
+                                <ul class="captcha-error-list">
+                                    {% for error in form.captcha.errors %}
+                                    <li style="margin-right: 40px; list-style-type: none; color: red;">{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+
+                                <div>
+                                    <a href="{% url 'password_reset' %}" class="btn btn-link" style="margin-bottom: 40px;">Olvidé mi contraseña</a>
+                                </div>
+
+                                <input type="submit" value="Ingresar" class="btn btn-success float-right">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</body>
+
+</html>
+{% endblock %}

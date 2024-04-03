@@ -1,0 +1,94 @@
+{% extends 'KabasisWebApp/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="post" id="question-form">
+                {% csrf_token %}
+                
+                <div class="progress" style="position: relative;">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" style="width: {{ porcentaje }}%;">
+                        <div style="position: absolute; width: 100%; color: black; text-align: center;">
+                            Avance: {{ porcentaje }}%
+                        </div>
+                    </div>
+                </div>
+                
+                
+            <div class="card shadow-lg p-4">
+
+
+
+
+
+                    <!-- Mostrar la pregunta actual basada en la pregunta individual obtenida en la vista -->
+                    <div class="question mb-5">
+                        <h3 class="mb-3">{{ contador }}. {{ pregunta.text }}</h3>
+                        {% if pregunta.question_type == 'text' %}
+                            <textarea class="form-control mb-3" id="text_answer_{{ pregunta.id }}" name="text_answer_{{ pregunta.id }}" rows="1" placeholder="Escribe tu respuesta aquí (máx. 500 caracteres)" required></textarea>
+                        {% elif pregunta.question_type == 'option' %}
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" id="option_a_{{ pregunta.id }}" name="option_answer_{{ pregunta.id }}" value="a" required>
+                                <label class="form-check-label" for="option_a_{{ pregunta.id }}">{{ pregunta.option_a }}</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" id="option_b_{{ pregunta.id }}" name="option_answer_{{ pregunta.id }}" value="b" required>
+                                <label class="form-check-label" for="option_b_{{ pregunta.id }}"> {{ pregunta.option_b }}</label>
+                            </div>
+                            {% if pregunta.option_c %}
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" id="option_c_{{ pregunta.id }}" name="option_answer_{{ pregunta.id }}" value="c" required>
+                                <label class="form-check-label" for="option_c_{{ pregunta.id }}"> {{ pregunta.option_c }}</label>
+                            </div>
+                            {% endif %}
+                            {% if pregunta.option_d %}
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" id="option_d_{{ pregunta.id }}" name="option_answer_{{ pregunta.id }}" value="d" required>
+                                <label class="form-check-label" for="option_d_{{ pregunta.id }}"> {{ pregunta.option_d }}</label>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                        <input type="hidden" name="question_id" value="{{ pregunta.id }}">
+                    </div>
+
+
+
+
+
+                    <!-- Botones para avanzar o retroceder entre preguntas -->
+                    <div class="d-flex justify-content-between">
+                        {% if previous_question %}
+                        <a href="{% url 'nombre_vista_pregunta' previous_question.id numeracion_pregunta %}" class="btn btn-secondary">Volver a pregunta anterior</a>
+                        {% else %}
+                        <!-- Espacio para mantener la alineación de los botones -->
+                        <div></div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary">Siguiente</button>
+                    </div>
+
+
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            if ("{{ pregunta.question_type }}" === "option") {
+                                // Selecciona todos los inputs de tipo radio dentro del formulario con id="question-form"
+                                document.querySelectorAll('#question-form input[type="radio"]').forEach(function(radio) {
+                                    radio.addEventListener('change', function() {
+                                        // Envía el formulario automáticamente cuando se selecciona una opción
+                                        document.getElementById('question-form').submit();
+                                    });
+                                });
+                                // Opcional: Oculta el botón Siguiente para preguntas de tipo 'option'
+                                document.querySelector('#question-form button[type="submit"]').style.display = 'none';
+                            }
+                        });
+                        </script>
+                        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

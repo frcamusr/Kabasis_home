@@ -1,0 +1,41 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Video</title>
+</head>
+
+<body>
+    <h1>Editar Video</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="titulo">Titulo del Video:</label>
+        <input type="text" id="titulo" name="titulo" value="{{ form.titulo.value }}" required><br>
+
+        
+        <label for="link">Enlace del Video:</label>
+        <input type="text" id="link" name="link" value="{{ form.link.value }}" required><br>
+
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" required>{{ form.descripcion.value }}</textarea><br>
+
+        <input type="submit" value="Guardar Cambios">
+    </form>
+
+    <a href="{% url 'listar_material' idCurso unidad %}">
+        <button>Volver a la Lista de Contenidos</button>
+    </a>
+</body>
+
+</html>
+
+
+{% endblock %}

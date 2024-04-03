@@ -1,0 +1,40 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="bg-white p-4 rounded text-center">
+        <h1 class="mb-4">Crear Nuevo Video</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="titulo">Nombre del video:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="video_url">Enlace del Video:</label>
+                <input type="text" class="form-control" id="video_url" name="video_url" required>
+            </div>
+
+            <div class="form-group">
+                <label for="orden">Orden:</label>
+                <input type="text" class="form-control" id="orden" name="orden" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary mr-2">Guardar Video</button>
+                <a href="{% url 'listar_material' idCurso unidad %}" class="btn btn-secondary">
+                    Volver a la Lista de Contenidos
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="container">
+        <h1 class="titulos">Administrar Áreas</h1>
+        {% if user.tipo_usuario == 'Administrador Kabasis' %}
+            <p class="subtitulos">En esta tabla se listan las áreas existentes en el sistema</p>
+        {% else %}
+            <p class="subtitulos">En esta tabla se listan las áreas existentes en tu empresa</p>
+        {% endif %}
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover bg-white">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center">Nombre del Área</th>
+                        <th class="text-center">Empresa Asociada</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for area in areas %}
+                    <tr>
+                        <td class="text-center">{{ area.nombre }}</td>
+                        <td class="text-center">
+                            {% if area.empresa %}
+                                {{ area.empresa.razon_social }}
+                            {% else %}
+                                Sin empresa asociada
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center">
+                                <a class="btn btn-primary mr-2" href="{% url 'actualizar_area' area.id %}" style="height: 38px; line-height: 1;">Editar</a>
+                                <a class="btn btn-danger" href="#" onclick="confirmarEliminacion(event, '{{ area.id }}')">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No hay áreas asociadas a su empresa.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center">
+            <a class="btn btn-primary btn-block" href="{% url 'crear_area' %}">Crear Área</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Función para confirmar eliminación
+    function confirmarEliminacion(event, id) {
+        event.preventDefault();
+        const url = "{% url 'eliminar_area' 0 %}".replace("0", id);
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará el área. ¿Deseas continuar?',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, eliminar',
+            reverseButtons: true,
+            confirmButtonColor: "#dc3545"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+{% endblock %}

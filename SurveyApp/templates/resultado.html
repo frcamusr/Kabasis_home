@@ -1,0 +1,100 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center mb-4">Resultado del cuestionario</h2>
+                {% if session_exists %}
+                    <p class="text-center">No se puede volver a la página del formulario.</p>
+                {% else %}
+                    <!-- Mostrar el contenido normal de la página de resultado -->
+                    <p class="text-center">¡Has completado el cuestionario!</p>
+                    {% comment %} <h4 class="text-center mb-4">Desglose de resultados:</h4>
+                    <p class="text-center">Total: {{ porcentaje }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped" style="width: {{ porcentaje }}%"></div>
+                    </div>
+                    <p class="text-center">Actitud: {{ porcentaje_actitud }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-success" style="width: {{ porcentaje_actitud }}%"></div>
+                    </div>
+                    <p class="text-center">Conducta: {{ porcentaje_conducta }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: {{ porcentaje_conducta }}%"></div>
+                    </div>
+                    <p class="text-center">Conocimientos: {{ porcentaje_conocimientos }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: {{ porcentaje_conocimientos }}%"></div>
+                    </div>
+                    <hr>
+
+                    <p class="text-center">seguridad exterior: {{ porcentaje_seg_exterior }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-success" style="width: {{ porcentaje_seg_exterior }}%"></div>
+                    </div>
+                    <p class="text-center">seguridad computacional: {{ porcentaje_seg_computador }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: {{ porcentaje_seg_computador }}%"></div>
+                    </div>
+                    <p class="text-center">contraseñas: {{ porcentaje_contrasena }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: {{ porcentaje_contrasena }}%"></div>
+                    </div>
+                    <p class="text-center">navegar: {{ porcentaje_navegar }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-success" style="width: {{ porcentaje_navegar }}%"></div>
+                    </div>
+                    <p class="text-center">correos: {{ porcentaje_correos }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: {{ porcentaje_correos }}%"></div>
+                    </div>
+                    <p class="text-center">sitios seguros: {{ porcentaje_sitios_seg }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: {{ porcentaje_sitios_seg }}%"></div>
+                    </div>
+                    <p class="text-center">hackers: {{ porcentaje_hackers }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-success" style="width: {{ porcentaje_hackers }}%"></div>
+                    </div>
+                    <p class="text-center">virus: {{ porcentaje_virus }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: {{ porcentaje_virus }}%"></div>
+                    </div>
+                    <p class="text-center">denuncia: {{ porcentaje_denuncia }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: {{ porcentaje_denuncia }}%"></div>
+                    </div>
+                    <p class="text-center">Entrenamiento: {{ porcentaje_entrenamiento }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-success" style="width: {{ porcentaje_entrenamiento }}%"></div>
+                    </div>
+                    <p class="text-center">Riesgos: {{ porcentaje_riesgos }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: {{ porcentaje_riesgos }}%"></div>
+                    </div>
+                    <p class="text-center">Politicas: {{ porcentaje_politicas }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-warning" style="width: {{ porcentaje_politicas }}%"></div>
+                    </div>
+                    <p class="text-center">Compromiso: {{ porcentaje_compromiso }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-success" style="width: {{ porcentaje_compromiso }}%"></div>
+                    </div>
+                    <p class="text-center">Disiasion: {{ porcentaje_disuasion }}%</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: {{ porcentaje_disuasion }}%"></div>
+                    </div> {% endcomment %}
+
+                    <!-- Agregar el botón "Ir al curso" -->
+                    <div class="text-center mt-4">
+                        <h5>¡Felicidades! Has finalizado</h5>
+                        <a href="{% url 'ver_curso' id=1 %}" class="btn btn-primary">Ir al Curso</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

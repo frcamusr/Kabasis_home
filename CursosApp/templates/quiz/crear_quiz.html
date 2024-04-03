@@ -1,0 +1,34 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="bg-white p-4 rounded text-center">
+        <h1 class="mb-4">Crear Nuevo Quiz</h1>
+
+        <form method="post" action="{% url 'crear_quiz' idCurso unidad %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" class="form-control" name="titulo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea class="form-control" name="descripcion" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="orden">Orden:</label>
+                <input type="number" class="form-control" name="orden" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Crear Quiz</button>
+                <a href="{% url 'listar_material' idCurso unidad %}" class="btn btn-secondary ml-2">
+                    Volver a la Lista de Contenidos
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

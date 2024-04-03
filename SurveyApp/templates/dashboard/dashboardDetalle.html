@@ -1,0 +1,364 @@
+{% extends 'KabasisWebApp/base.html' %} {% block content %}
+<div class="vistaDatos">
+  <div class="row cartas-info-empresa">
+    <!-- order-card start -->
+    <div class="col-md-12 mb-1 col-xl-3">
+      <div class="card custom-card order-card">
+        <div class="card-body">
+          <h6 class="text-white">Máximo de Alumnos Permitidos</h6>
+          <h2 class="text-center text-white">
+            {{maximo_alumno}}
+            <i class="fa-solid fa-users" style="color: #c497ff"></i>
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mb-1 col-xl-3">
+      <div class="card custom-card order-card">
+        <div class="card-body">
+          <h6 class="text-white">Alumnos que se han Registrado</h6>
+          <h2 class="text-center text-white">
+            {{ registrado}}
+            <i class="fa-solid fa-user-plus" style="color: #6c8cc8"></i>
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mb-1 col-xl-3">
+      <div class="card custom-card order-card">
+        <div class="card-body">
+          <h6 class="text-white">Invitaciones Enviadas</h6>
+          <h2 class="text-center text-white">
+            {{invitados}}
+            <i
+              class="fa-solid fa-envelope-circle-check"
+              style="color: #6c8cc8"
+            ></i>
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 col-xl-3">
+      <div class="card custom-card order-card">
+        <div class="card-body">
+          <h6 class="text-white">Invitaciones Disponibles</h6>
+          <h2 class="text-center text-white">
+            {{disponibles}}
+            <i class="fa-regular fa-envelope" style="color: #718fca"></i>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-xl-1"></div>
+
+    <div class="col-md-4  col-xl-5">
+      <p>Invitaciones Utilizadas:</p>
+      <div class="progress" style="height: 40px;">
+        <div class="progress-bar bg-dark" style="width: {{porcentaje_enviado}}%">{{porcentaje_enviado}}%</div>
+      </div>
+    </div>
+    <a href="{% url 'crear_usuario_personalizado' %}" class="btn btn-success mr-2 col-xl-2 mt-5">
+      Enviar invitación
+    </a>
+    
+    <button type="button" class=" btn btn-primary col-xl-2 mt-5">
+      Aumentar Suscripción
+    </button>
+  </div>
+  <div class="row mt-5">
+    <div class="col-xl-1"></div>
+    <div class="col-md-4 col-xl-5">
+      <p>Alumnos que se han registrado:</p>
+      <div class="progress" style="height: 40px;">
+        <div class="progress-bar bg-dark" style="width: {{porcentaje_registrado}}%">{{porcentaje_registrado}}%</div>
+      </div>  
+    </div>
+    <button type="button" class=" btn btn-success mr-2 col-xl-2 mt-5" data-toggle="modal" data-target="#exampleModal">
+      Ver Alumnos registrados
+    </button>
+    <button type="button" class=" btn btn-danger col-xl-2 mt-5" data-toggle="modal" data-target="#exampleModal2">
+      Ver Alumnos no registrados
+    </button>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Alumnos Registrados</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% if nombreRegistrados %}
+        {% for username, correo in nombreRegistrados %}
+          <p>{{ forloop.counter }} registrado:</p>
+          <ul>
+            <li>username: {{ username }}</li>
+            <li>correo: {{ correo }}</li>
+          </ul>
+        {% endfor %}
+      {% else %}
+        <p>No existen ningún alumno registrado.</p>
+      {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Alumnos Registrados</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% if nombreNoRegistrados %}
+        {% for username, correo in nombreNoRegistrados %}
+          <p>{{ forloop.counter }} registrado:</p>
+          <ul>
+            <li>username: {{ username }}</li>
+            <li>correo: {{ correo }}</li>
+          </ul>
+        {% endfor %}
+      {% else %}
+        <p>No existen alumnos no registrado.</p>
+      {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="row contenedorPie">
+  <div class="col-md-12 col-xl-3 graficoPie">
+    <canvas id="myChart1"></canvas>
+  </div>
+  <div class="col-md-12 col-xl-3 graficoPie">
+    <canvas id="myChart2"></canvas>
+  </div>
+  <div class="col-md-12 col-xl-3 graficoPie">
+    <canvas id="myChart3"></canvas>
+  </div>
+  <div class="col-md-12 col-xl-3 graficoPie">
+    <canvas id="myChart4"></canvas>
+  </div>
+</div>
+
+<div class="container-fluid">
+
+  <div class="row pt-4 mt-4">
+    <div class="col-xl-3"></div>
+    <div class="col">
+      <div class="btn-group mt-4" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary mx-1" id="btnDato">
+          Estado Invitaciones
+        </button>
+        <button type="button" class="btn btn-secondary mx-1" id="btnEstado">
+          Datos Alumnos
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script>
+
+
+  let myChart1 = null;
+  let myChart2 = null;
+  let myChart3 = null;
+  let myChart4 = null;
+
+
+  function actualizarGrafico2() {
+
+    document.querySelector('.vistaDatos').style.display = 'block';
+    document.querySelector('.contenedorPie').style.display = 'none';
+
+
+    if (myChart1 !== null) {
+      myChart1.destroy();
+      myChart2.destroy();
+      myChart3.destroy();
+      myChart4.destroy();
+    }
+
+  }
+
+  function actualizarGrafico1(data1, data2, data3, data4) {
+
+    document.querySelector('.vistaDatos').style.display = 'none';
+    document.querySelector('.contenedorPie').style.display = 'flex';
+
+
+    if (myChart1 !== null) {
+      myChart1.destroy();
+      myChart2.destroy();
+      myChart3.destroy();
+      myChart4.destroy();
+    }
+
+    const ctx1 = document.getElementById('myChart1');
+    const ctx2 = document.getElementById('myChart2');
+    const ctx3 = document.getElementById('myChart3');
+    const ctx4 = document.getElementById('myChart4');
+
+
+    myChart1 = new Chart(ctx1, {
+      type: 'pie',
+      data: data1, // Asegúrate de usar data3 aquí, no data
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          title: {
+            display: true,
+            text: 'Genero',
+          },
+          // Configuración del plugin datalabels
+
+        }
+      },
+    });
+    myChart2 = new Chart(ctx2, {
+      type: 'pie',
+      data: data2, // Asegúrate de usar data3 aquí, no data
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          title: {
+            display: true,
+            text: 'Edad',
+          },
+          // Configuración del plugin datalabels
+
+        }
+      },
+    });
+    myChart3 = new Chart(ctx3, {
+      type: 'pie',
+      data: data3, // Asegúrate de usar data3 aquí, no data
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          title: {
+            display: true,
+            text: 'Nivel de Estudio',
+          },
+          // Configuración del plugin datalabels
+
+        }
+      },
+    });
+    myChart4 = new Chart(ctx4, {
+      type: 'pie',
+      data: data4, // Asegúrate de usar data3 aquí, no data
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          title: {
+            display: true,
+            text: 'Antigüedad en la organización (en años)',
+          },
+          // Configuración del plugin datalabels
+
+        }
+      },
+    });
+
+  }
+
+
+
+  let data2 = {
+    labels: ['menor a 25', 'entre 25 y 35', 'entre 35 y 45', 'mayor a 45'],
+    datasets: [{
+      label: 'Edad',
+      data: {{ arreglo_edades| safe }}, // Utiliza la notación de Django aquí
+      }]
+    };
+
+
+  let data1 = {
+    labels: ['Masculino', 'Femenino', 'otro     '],
+    datasets: [{
+      label: 'Género',
+      data: {{ arreglo_genero| safe }}, // Utiliza la notación de Django aquí
+  backgroundColor: ['blue', 'red', 'green'],
+      }]
+    };
+
+
+  let data3 = {
+    labels: ['Secundario', 'Universitario', 'Tecnico'],
+    datasets: [{
+      label: 'Nivel de Estudio',
+      data: {{ arreglo_estudios| safe }}, // Utiliza la notación de Django aquí
+  backgroundColor: ['red', 'green', 'blue'],
+    }]
+  };
+
+
+  let data4 = {
+    labels: ['Menos de 1', 'Entre 2 y 5', 'Entre 5 y 10', 'más de 10'],
+    datasets: [{
+      label: 'Antigüedad en la organización',
+      data: {{ arreglo_anhos| safe }}, // Utiliza la notación de Django aquí
+  backgroundColor: ['red', 'orange', 'blue', 'purple'],
+    }]
+  };
+
+
+
+  document.getElementById('btnEstado').addEventListener('click', function () {
+    actualizarGrafico1(data1, data2, data3, data4);
+  });
+
+  document.getElementById('btnDato').addEventListener('click', function () {
+    actualizarGrafico2();
+  });
+
+
+  actualizarGrafico2()
+</script>
+
+{% endblock %}

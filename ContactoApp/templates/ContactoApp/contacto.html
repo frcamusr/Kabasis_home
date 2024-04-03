@@ -1,0 +1,43 @@
+{% extends "KabasisWebApp/base.html"%}
+
+{% load static %}
+   
+{% block content%}
+
+<html>
+
+
+<body>
+    <section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+        <h1 class="titulos">Contacto</h1>
+        <p class="subtitulos">En esta sección podrás contactarte con el administrador de la página ingresando los datos solicitados</p>
+    
+        
+
+            {% if "valido" in request.GET %}
+
+            {% endif %}
+
+            <form action="" method="POST" style="text-align: center;">
+                {% csrf_token %}
+
+                <table style="color: white; margin: 20px auto;">
+
+                    {{miformulario.as_table}}
+
+                </table>
+
+                <input type="submit" value="Enviar" style="width: 150px;">
+
+            </form>
+
+        
+    </section>
+
+</body>
+
+
+
+</html>
+
+{% endblock %}

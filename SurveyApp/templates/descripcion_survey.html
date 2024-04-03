@@ -1,0 +1,35 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-info" role="alert">
+        <p>Le pedimos el máximo de sinceridad al responder ya que es totalmente anónimo y tiene por finalidad conocer mejor sus opiniones y conductas para mejorar nuestro trabajo en seguridad de la información.</p>
+        <p>Por favor, responda de la forma más sincera posible! Este cuestionario es COMPLETAMENTE ANÓNIMO, sólo necesitamos algunos datos de usted para fines estadísticos.</p>
+        <p>Debe seguir los siguientes pasos:</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Paso 1</h5>
+                    <p class="card-text">Complete datos de usted para fines estadísticos y responda preguntas sobre la seguridad de su organización</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Paso 2</h5>
+                    <p class="card-text">Complete el cuestionario, este es muy ágil y lo responderá en cerca de 15 minutos.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary" onclick="location.href='{% url 'formulario' %}'">Iniciar Test</button>
+    </div>
+</div>
+{% endblock %}

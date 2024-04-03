@@ -1,0 +1,15 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+    <div class="container mt-4 text-center">
+        <div class="alert alert-success" role="alert">
+            ¡Bienvenido! Has iniciado sesión en Kabasis. <br>
+            Antes de ir a las unidades del curso debes realizar un test inicial. <!-- Puedes personalizar este mensaje -->
+        </div>
+        
+        <button class="btn btn-primary" onclick="location.href='{% url 'descripcion_survey' %}'">
+            Descripción Test Inicial
+        </button>
+    </div>
+{% endblock %}
+

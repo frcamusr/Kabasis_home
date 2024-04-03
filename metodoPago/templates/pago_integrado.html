@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Mi Proyecto</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Agrega el enlace a Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- SDK de Mercado Pago -->
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+        <style>
+            /* Estilo adicional para resaltar el cambio de color al hacer clic */
+            .custom-button {
+                width: 100%;
+                padding-top: 80%;
+                position: relative;
+                margin-bottom: 10px;
+                border: none;
+                background-color: lightcyan;
+            }
+
+            .custom-button.selected {
+                background-color: darkblue !important;
+                color: white !important;
+            }
+
+            .button-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+
+
+        <div class="container mt-5" id="registros-container">
+            <div class="text-center mb-5">
+                <h3>
+                    Elige el plan que mejor se adapte a las necesidades de tu equipo. <br>
+                     Cada plan está diseñado para un número específico de participantes
+                </h3>
+
+            </div>
+            <div class="row">
+                <!-- Iteramos sobre los registros y mostramos la información -->
+                <!-- Iteramos sobre los registros y mostramos la información -->
+                {% for registro in preferencia %}
+                <div class="col-md-4 mb-4">
+                    <form method="post" action="{% url 'pago_integrado' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="registro_id" value="{{ registro.id }}">
+                        <!-- Agrega un identificador único al botón -->
+                        <button type="submit" id="boton-{{ registro.id }}" class="custom-button" onclick="changeColor(this, '{{ registro.id|stringformat:"d" }}')">
+                            <div class="button-content">
+                                <!-- Registro.description en fuente más grande -->
+                                <h4 class="font-weight-bold">{{ registro.description }}</h4>
+                                <!-- Registro.unit_price en fuente más pequeña -->
+                                <p>
+                                    Precio: ${{ registro.unit_price }}
+                                </p>
+
+                            </div>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+
+            </div>
+            <div class="d-flex flex-column bd-highlight mb-3">
+                <h5>
+                    Una vez que hayas seleccionado tu plan, podrás realizar el pago de forma segura.
+                    <br>
+                    Selecciona tu Método de Pago:
+                </h5>
+                <div id="payment-button"></div>
+                <a href="#" class="btn btn-primary mt-3" >PayPal</a>
+            </div>  
+
+        </div>
+
+        <!-- Agrega el enlace a Bootstrap JS y Popper.js (necesario para algunos componentes de Bootstrap) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <script>
+            // Función para cambiar el color al hacer clic en un botón y enviar el ID al backend
+            function changeColor(element, registroId){
+                registroId = parseInt(registroId);
+                var buttons = document.querySelectorAll('.custom-button');
+                buttons.forEach(function (button) {
+                    button.classList.remove('selected');
+                });
+                element.classList.add('selected');
+        
+                // Guardar la selección en localStorage
+                localStorage.setItem('selectedRegistroId', registroId);
+        
+                // Resto del código para enviar el ID al backend
+                // ...
+        
+                // Recargar la página (o realizar otras acciones según tus necesidades)
+                location.reload();
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+                // Verificar si hay un plan seleccionado guardado en localStorage
+                var selectedRegistroId = parseInt(localStorage.getItem('selectedRegistroId'));
+            
+                if (selectedRegistroId) {
+                    var elementoSeleccionado = document.getElementById("boton-" + selectedRegistroId);
+                    if (elementoSeleccionado) {
+                        elementoSeleccionado.classList.add('selected');
+                    }
+                } else {
+                    // Si no hay un plan seleccionado guardado, marcar inicialmente el primer botón como seleccionado
+                    var primerBoton = document.getElementById("boton-1");
+                    if (primerBoton) {
+                        primerBoton.classList.add('selected');
+                        localStorage.setItem('selectedRegistroId', 1);
+                    }
+                }
+            });
+            
+            
+
+            // Puedes eliminar la función changeColor del script ya que el formulario manejará la acción
+            const mp = new MercadoPago('APP_USR-44cb5b1b-0e35-4914-a3d2-f49cc8365626');
+
+            // Creación del botón de pago
+            mp.bricks().create("wallet", "payment-button", {
+                initialization: {
+                    preferenceId: preference.id,  // Utiliza el ID de preferencia desde el back-end
+                    redirectMode: "modal",
+                },
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,240 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
+
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="container">
+        <div class="text-center">
+            <a style="margin-bottom: 10px;" class="btn btn-primary fas fa-arrow-left d-flex float-left"
+                href="{% url 'crear_usuario_personalizado' %}"> &nbsp;&nbsp;Crear Usuario personalizado</a>
+        </div>
+        <br><br>
+        <h1 class="titulos">Enviar Invitación de Registro</h1>
+        <p class="subtitulos">En esta sección podrás invitar usuarios Alumnos ingresando sus correos</p>
+        <form id="formulario-invitacion" method="post">
+            {% csrf_token %}
+
+            {# Mostrar errores del formulario #}
+            {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            {# Campo de correo electrónico #}
+            <div style="color: white;" class="form-group">
+                <label for="correo-electronico">Correos Electrónicos:</label>
+                <textarea id="correo-electronico" class="form-control"
+                    placeholder="Ingrese los correos electrónicos separados por comas o salto de línea"
+                    rows="6"></textarea>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="button" id="btn-agregar-correo" class="btn btn-primary mt-2 float-right">Agregar
+                            Correo(s)</button>
+                    </div>
+                </div>
+            </div>
+            <ul id="lista-correos" class="list-group mb-3"></ul>
+            <input type="hidden" name="email" id="correos-agregados">
+
+            {# Campo de área #}
+            <!-- Campo de área (oculto) -->
+            <div style="color: white; display: none;" class="form-group">
+                {{ form.area|as_crispy_field }}
+            </div>
+
+
+            {# Campo de mensaje personalizado #}
+            <div style="color: white;" class="form-group">
+                {{ form.mensaje_personalizado|as_crispy_field }}
+            </div>
+
+            <input type="hidden" name="area_id" id="area_id">
+            <div class="row">
+                <div class="col-12">
+                    <button style="margin-bottom: 40px;" type="button" id="btn-enviar-invitacion"
+                        class="btn btn-primary float-right">Enviar
+                        Invitación</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label style="color: white;" class="white-label" for="link_registro">Enlace de Registro:</label>
+                <input type="text" id="link_registro" class="form-control" readonly>
+                <button type="button" onclick="copiarLink()" class="btn btn-primary mt-3 float-right">Copiar
+                    Enlace</button>
+                <p id="mensaje_copiado" style="display:none; color: yellow;">Enlace copiado exitosamente.</p>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Funcionalidad existente
+        const areaSelect = document.querySelector('[name="area"]');
+        const mensajeInput = document.querySelector('[name="mensaje_personalizado"]');
+        const linkRegistroInput = document.getElementById('link_registro');
+        const linkRegistroBase = "{{ link_registro_base }}";
+        const idEmpresaCodificado = "{{ id_empresa_codificado }}";
+        const razonSocial = "{{ razon_social }}";
+
+        let linkRegistro = `${linkRegistroBase}?empresa_id=${idEmpresaCodificado}`;
+        linkRegistroInput.value = linkRegistro;
+
+        mensajeInput.value = generarMensajePredeterminado();
+
+        areaSelect.addEventListener('change', actualizarMensajeYEnlace);
+
+        function copiarLink() {
+            const linkRegistroInput = document.getElementById('link_registro');
+            linkRegistroInput.select();
+            document.execCommand('copy');
+            const mensajeCopiado = document.getElementById('mensaje_copiado');
+            mensajeCopiado.style.display = 'block';
+            setTimeout(() => mensajeCopiado.style.display = 'none', 5000);
+        }
+
+        // Nueva funcionalidad para agregar correos
+        document.getElementById('btn-agregar-correo').addEventListener('click', function () {
+            var textoCorreos = document.getElementById('correo-electronico').value.trim();
+            var correos = textoCorreos.split(/[\n,]+/);
+            var lista = document.getElementById('lista-correos');
+            var correosInvalidos = [];
+
+            if (!textoCorreos) {
+                alert('Por favor, ingrese los correos electrónicos antes de agregar.');
+            } else {
+                correos.forEach(function (correo) {
+                    if (correo.trim() !== '') {
+                        if (validarCorreo(correo.trim())) {
+                            var elemento = crearElementoListaCorreo(correo.trim());
+                            lista.appendChild(elemento);
+                        } else {
+                            correosInvalidos.push(correo.trim());
+                        }
+                    }
+                });
+                document.getElementById('correo-electronico').value = '';
+                actualizarCorreosAgregados();
+            }
+
+            if (correosInvalidos.length > 0) {
+                Swal.fire({
+                    title: 'Correos Inválidos',
+                    html: 'Los siguientes correos electrónicos son inválidos:<br><strong>' + correosInvalidos.join(', ') + '</strong>',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+
+        // Función para validar un correo electrónico
+        function validarCorreo(correo) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(correo);
+        }
+
+        function crearElementoListaCorreo(correo) {
+            var lista = document.getElementById('lista-correos');
+            var elemento = document.createElement('li');
+            elemento.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+            var correoSpan = document.createElement('span');
+            correoSpan.textContent = correo;
+            elemento.appendChild(correoSpan);
+            var btnEliminar = document.createElement('button');
+            btnEliminar.textContent = 'Quitar';
+            btnEliminar.classList.add('btn', 'btn-danger', 'btn-sm');
+            btnEliminar.onclick = function (event) {
+                lista.removeChild(elemento);
+                actualizarCorreosAgregados();
+            };
+            elemento.appendChild(btnEliminar);
+            return elemento;
+        }
+
+        function actualizarCorreosAgregados() {
+            var elementosLista = document.querySelectorAll('#lista-correos li span');
+            var correos = Array.from(elementosLista).map(el => el.textContent);
+            document.getElementById('correos-agregados').value = correos.join(',');
+        }
+
+        function actualizarMensajeYEnlace() {
+            const areaId = areaSelect.value || '';
+            const areaIdCodificado = areaId ? btoa(areaId) : '';
+            document.getElementById('area_id').value = areaIdCodificado;
+            linkRegistro = `${linkRegistroBase}?empresa_id=${idEmpresaCodificado}&area_id=${areaIdCodificado}`;
+            linkRegistroInput.value = linkRegistro;
+            mensajeInput.value = generarMensajePredeterminado(areaSelect.options[areaSelect.selectedIndex].text);
+        }
+
+        function generarMensajePredeterminado(areaNombre = '') {
+            const baseMensaje = `Nos complace extenderte una invitación exclusiva para formar parte de nuestra comunidad en Kabasis${areaNombre ? ', específicamente en el área de ' + areaNombre : ''}.\n\nEsta plataforma ha sido cuidadosamente seleccionada para enriquecer nuestro entorno de aprendizaje y desarrollo profesional. En Kabasis, descubrirás una amplia gama de materiales dedicados a la seguridad digital, todos diseñados para complementar y potenciar tus habilidades y conocimientos en este campo vital.\n\nPara comenzar tu viaje en Kabasis, por favor regístrate usando el siguiente enlace personalizado: ${linkRegistro}. La inscripción es sencilla y te brindará acceso inmediato a todos los recursos disponibles.\n\nEstamos entusiasmados por ver el impacto positivo que Kabasis tendrá en tu desarrollo profesional.\n\nAtentamente: \n\n${razonSocial}.`;
+            return baseMensaje;
+        }
+
+        document.getElementById('btn-enviar-invitacion').addEventListener('click', function () {
+            // Validar correos antes de enviar el formulario
+            var correos = document.getElementById('correos-agregados').value.split(',');
+            var correosInvalidos = [];
+            correos = correos.filter(correo => {
+                if (!validarCorreo(correo)) {
+                    correosInvalidos.push(correo);
+                    return false;
+                }
+                return true;
+            });
+            if (correosInvalidos.length > 0) {
+                Swal.fire({
+                    title: 'Correos Inválidos',
+                    html: 'Los siguientes correos electrónicos son inválidos:<br><strong>' + correosInvalidos.join(', ') + '</strong>',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+            document.getElementById('formulario-invitacion').submit();
+        });
+
+        function mostrarMensajes() {
+            {% if correos_enviados %}
+            Swal.fire({
+                title: 'Invitación(es) Enviada(s)',
+                html: 'Las invitaciones se han enviado correctamente a los siguientes correos:<br><strong>{{ correos_enviados|join:", " }}</strong>',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then((result) => {
+                // Verifica si también hay correos inválidos para mostrar ese mensaje después
+                {% if correos_invalidos %}
+                mostrarMensajeAdvertencia();
+                {% endif %}
+            });
+            {% elif correos_invalidos %}
+            mostrarMensajeAdvertencia();
+            {% endif %}
+        }
+
+        // Función específica para mostrar mensaje de advertencia
+        function mostrarMensajeAdvertencia() {
+            Swal.fire({
+                title: 'Advertencia',
+                html: 'No se pudieron enviar invitaciones a los siguientes correos debido a un formato incorrecto:<br><strong>{{ correos_invalidos|join:", " }}</strong>',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+
+        mostrarMensajes();
+
+    });
+</script>
+
+</div>
+</div>
+</section>
+
+{% endblock %}

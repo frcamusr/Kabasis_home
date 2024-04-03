@@ -1,0 +1,71 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+<div class="container">
+    <h1 style="color: white;" class="text-center">Administrar videos</h1>
+    <div class="table-responsive">
+
+        <table class="table table-striped table-hover bg-white table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">Titulo video</th>
+                    <th class="text-center">Descripción</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>   
+            <tbody>
+                {% if videos %}
+                    {% for v in videos %}
+                        <tr>
+                            <td class="text-center">{{ v.titulo | title }}</td>
+                            <td class="text-center">{{ v.descripcion }}</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <a class="btn btn-primary btn-sm mr-2" href="{% url 'editar_video' v.id %}">Editar</a>
+                                    <a class="btn btn-danger btn-sm" href="#" onclick="confirmarEliminacion(event, '{{ v.id }}')">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">No hay videos disponibles.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+    <div class="text-center">
+        <a class="btn btn-success btn-block" href="{% url 'agregar_video' %}">Crear Video</a>
+    </div>
+</div>
+</section>
+
+<script>
+    function confirmarEliminacion(event, id) {
+      event.preventDefault();
+  
+      const url = "{% url 'eliminar_video' 0 %}".replace("0", id);
+  
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción eliminará el video. ¿Deseas continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sí, eliminar',
+        reverseButtons: true,
+        confirmButtonColor: "#dc3545"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = url;
+        }
+      });
+    }
+</script>
+
+{% endblock %}

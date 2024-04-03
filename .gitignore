@@ -1,0 +1,6 @@
+/static/
+# /kabasisWeb
+# /kabasisWeb/settings.py
+# kabasisWeb/
+__pycache__/
+*.pyc

@@ -1,0 +1,123 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+  <div class="container">
+    <h1 class="titulos">Administrar Usuarios Alumnos</h1>
+    <p class="subtitulos">En esta tabla se pueden ver los alumnos de tu empresa registrados en el sistema</p>
+
+    <form id="massDeleteForm" action="{% url 'eliminar_usuarios_masiva' %}" method="post">
+      {% csrf_token %}
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered bg-white">
+          <thead class="thead-dark">
+            <tr>
+              <th class="text-center"><input type="checkbox" id="selectAll" /></th>
+              <th class="text-center">Username</th>
+              <th class="text-center">Email</th>
+              <th class="text-center">Razón social</th>
+              <th class="text-center">Tipo de Usuario</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+              <td class="text-center"><input type="checkbox" class="selectUser" name="userIds[]" value="{{ usuario.id }}" /></td>
+              <td class="text-center">{{ usuario.username }}</td>
+              <td class="text-center">{{ usuario.email }}</td>
+              <td class="text-center">{{ usuario.empresa.razon_social }}</td>
+              <td class="text-center">{{ usuario.tipo_usuario }}</td>
+              <td class="text-center">
+                <div class="d-flex justify-content-center">
+                  <a class="btn btn-primary mr-2" href="{% url 'actualizar_usuario_personalizado' usuario.id %}">Editar</a>
+                  <a class="btn btn-danger" href="#" onclick="confirmarEliminacion(event, '{{ usuario.id }}')">Eliminar</a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="text-center">No hay usuarios para mostrar.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          {% if usuarios %}
+          <tfoot>
+            <tr>
+              <td class="text-center">
+                <!-- Botón ahora colocado en el pie de la tabla -->
+                <button style="font-size: 13px;" type="button" class="btn btn-danger" onclick="confirmarEliminacionMasiva()">Eliminar Seleccionados</button>
+              </td>
+              <!-- Espacios vacíos para las demás columnas -->
+              <td colspan="5"></td>
+            </tr>
+          </tfoot>
+          {% endif %}
+        </table>
+      </div>
+    </form>
+
+    <div class="text-center mt-3">
+      <a class="btn btn-primary btn-block" href="{% url 'crear_usuario_personalizado' %}">Crear Usuario</a>
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById('selectAll').addEventListener('click', function() {
+  var checkboxes = document.querySelectorAll('.selectUser');
+  for (var checkbox of checkboxes) {
+    checkbox.checked = this.checked;
+  }
+});
+
+function confirmarEliminacion(event, id) {
+  event.preventDefault();
+
+  const url = "{% url 'eliminar_usuario_personalizado' 0 %}".replace("0", id);
+
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción eliminará al usuario. ¿Deseas continuar?',
+    icon: 'warning',
+    showCancelButton: true,
+    cancelButtonText: 'Cancelar',
+    confirmButtonText: 'Sí, eliminar',
+    reverseButtons: true,
+    confirmButtonColor: "#dc3545"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = url;
+    }
+  });
+}
+
+function confirmarEliminacionMasiva() {
+  var selectedUsers = document.querySelectorAll('.selectUser:checked');
+  if (selectedUsers.length > 0) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará a los usuarios seleccionados. ¿Deseas continuar?',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, eliminar',
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById('massDeleteForm').submit();
+      }
+    });
+  } else {
+    Swal.fire({
+      title: 'Atención',
+      text: 'Por favor, selecciona al menos un usuario para eliminar.',
+      icon: 'warning',});
+  }
+}
+</script>
+{% endblock %}

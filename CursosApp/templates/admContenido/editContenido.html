@@ -1,0 +1,102 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    .transparent-table {
+        background-color: rgba(255, 255, 255, 0.6);
+        border: 1px solid #ddd;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <table class="table table-bordered transparent-table rounded-lg">
+        <thead>
+            <tr class="bg-primary text-white">
+                <th scope="col" style="width: 30%;">Cursos</th>
+                <th scope="col" style="width: 30%;">Unidad</th>
+                <th scope="col" style="width: 40%;">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="list-group" id="curso-lista">
+                        {% for curso in cursos %}
+                            <button class="list-group-item list-group-item-action curso-btn" data-curso="{{curso.id}}">
+                                <h5 class="mb-1">{{curso.nombre}}</h5>
+                                <p class="mb-1">{{curso.descripcion}}</p>
+                            </button>
+                        {% endfor %}
+                        <button class="btn btn-primary mt-2" id="crear-curso-btn" onclick="location.href='{% url 'listar_curso' %}'">Administrar Cursos</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="list-group" id="unidad-lista">
+                        <!-- Unidades se llenarán dinámicamente usando JavaScript -->
+                    </div>
+                    <button class="btn btn-primary mt-2" id="crear-unidad-btn" onclick="location.href='{% url 'agregar_unidad' %}'">Crear Unidad</button>
+                </td>
+                <td id="columna-opciones" style="display:none;">
+                    <table class="table transparent-table">
+                        <tbody id="opciones-lista">
+                            <!-- Opciones de contenido se llenarán dinámicamente usando JavaScript -->
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Ocultar los botones de "Crear Unidad" y "Opciones" al inicio
+        $('#crear-unidad-btn').hide();
+        $('#columna-opciones').hide();
+
+        $('#curso-lista').on('click', '.curso-btn', function() {
+            var idCurso = $(this).data('curso');
+            $.ajax({
+                url: 'obtener_unidades/' + idCurso + '/',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var unidadesHTML = '';
+                    data.unidades.forEach(function(unidad) {
+                        unidadesHTML += '<button class="list-group-item list-group-item-action unidad-btn" data-unidad="' + unidad.id + '">' + unidad.titulo + '</button>';
+                    });
+                    $('#unidad-lista').html(unidadesHTML);
+
+                    // Mostrar el botón de "Crear Unidad" siempre debajo de la lista de unidades
+                    $('#crear-unidad-btn').show();
+
+                    // Mostrar la columna de opciones
+                    $('#columna-opciones').show();
+
+                    $('#unidad-lista').on('click', '.unidad-btn', function() {
+                        var unidadId = $(this).data('unidad');
+                        var cursoNombre = $('.curso-btn.active h5').text();
+                        var unidadTitulo = $(this).text();
+
+                        // Agregar fila a la tabla de opciones
+                        var opcionesHTML = '<tr>';
+                        opcionesHTML += '<td>' + cursoNombre + '  ' + unidadTitulo + '</td>';
+                        opcionesHTML += '</tr>';
+                        opcionesHTML += '<tr>';
+                        opcionesHTML += '<td>';
+                        opcionesHTML += '<button class="btn btn-info" onclick="location.href=\'listar_material/' + idCurso + '/' + unidadId + '\';">Administrar Contenido de unidad</button>';
+                        opcionesHTML += '</td>';
+                    
+                            
+                        opcionesHTML += '</tr>';
+                        $('#opciones-lista').html(opcionesHTML);
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

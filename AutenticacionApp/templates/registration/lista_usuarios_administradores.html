@@ -1,0 +1,88 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+<div class="container">
+  <h1 class="titulos">Gestionar Usuarios Administradores</h1>
+  <p class="subtitulos">En esta tabla podrás ver los usuarios administradores registrados en el sistema</p>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered bg-white">
+      <thead class="thead-dark">
+        <tr>
+          <th class="text-center">Username</th>
+          <th class="text-center">Email</th>
+          <th class="text-center">Razón social</th>
+          <th class="text-center">Tipo de Usuario</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% for usuario in usuarios %}
+        {% if not usuario.tipo_usuario == 'Administrador Kabasis' %}
+        {% if not request.user.tipo_usuario == 'Administrador' or not usuario.tipo_usuario == 'Administrador' %}
+            
+            <tr>
+              <td class="text-center">{{ usuario.username }}</td>
+              <td class="text-center">{{ usuario.email }}</td>
+              <td class="text-center">{{ usuario.empresa.razon_social }}</td>
+              <td class="text-center">{{ usuario.tipo_usuario }}</td>
+              <td class="text-center">
+                <div class="d-flex justify-content-center">
+                  <a class="btn btn-primary mr-2" href="{% url 'actualizar_usuario_personalizado_administrador' usuario.id %}" style="height: 38px; line-height: 1;">Editar</a>
+                  <a class="btn btn-danger" href="#" onclick="confirmarEliminacion(event, '{{ usuario.id }}')">Eliminar</a>
+                </div>
+              </td>
+            </tr>
+            {% endif %}
+          {% endif %}
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-center">No hay usuarios para mostrar.</td>
+          </tr>
+        {% endfor %}
+
+        <!-- Verificar si solo el usuario logueado está en la lista -->
+        {% if usuarios|length == 1 and usuarios.first == request.user %}
+          <tr>
+            <td colspan="5" class="text-center">No hay usuarios asociados a su empresa.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="text-center">
+    <a class="btn btn-primary btn-block" href="{% url 'crear_usuario_personalizado_administrador' %}">Crear Usuario</a>
+
+  </div>
+</div>
+</section>
+
+<script>
+  function confirmarEliminacion(event, id) {
+    event.preventDefault();
+
+    const url = "{% url 'eliminar_usuario_personalizado_administrador' 0 %}".replace("0", id);
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará al usuario. ¿Deseas continuar?',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, eliminar',
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = url;
+      }
+    });
+  }
+</script>
+{% endblock %}

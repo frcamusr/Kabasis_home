@@ -1,0 +1,154 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="container">
+        <h1 style="color: white;" class="text-center">Administrar Contenido</h1>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover bg-white">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center">Tipo de contenido</th>
+                        <th class="text-center">Titulo contenido</th>
+                        <th class="text-center">Descripción contenido</th>
+                        <th class="text-center">Acciones</th>
+                        <th class="text-center">Orden</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for content in content_list %}
+                        <tr>
+                            <td class="text-center">
+                                {% if content.video_url %}
+                                    Video
+                                {% else %}
+                                    Quiz
+                                {% endif %}
+                            </td>
+                            <td class="text-center">{{ content.titulo | title }}</td>
+                            <td class="text-center">{{ content.descripcion }}</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    {% if content.video_url %}
+                                        <a class="btn btn-primary mr-2" href="{% url 'editar_video' content.id %}" style="height: 38px; line-height: 1;">Editar</a>
+                                        <a class="btn btn-danger" href="{% url 'eliminar_video' content.id %}">Eliminar</a>
+                                    {% else %}
+                                        <a class="btn btn-primary mr-2" href="{% url 'editar_quiz' content.id %}" style="height: 38px; line-height: 1;">Editar</a>
+                                        <a class="btn btn-danger" href="{% url 'eliminar_quiz' content.id %}">Eliminar</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <select class="form-control" onchange="updateOrder(this, '{{ content.id }}', {% if content.video_url %}'video'{% else %}'quiz'{% endif %}, '{{ content.orden }}')">
+                                    {% for order_value in order_values %}
+                                        <option value="{{ order_value }}" {% if content.orden == order_value %}selected{% endif %}>{{ order_value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>                      
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="container">
+            <!-- Primera fila con dos columnas -->
+            <div class="row">
+                <!-- Primera columna (izquierda) -->
+                <div class="col-md-6">
+                    <a class="btn btn-success btn-block" href="{% url 'crear_quiz' idCurso=idCurso unidad=unidad %}">Crear Nuevo Quiz</a>
+                </div>
+                <!-- Segunda columna (derecha) -->
+                <div class="col-md-6">
+                    <a class="btn btn-success btn-block" href="{% url 'crear_video' idCurso unidad %}">Crear video</a>
+                </div>
+            </div>
+        
+            <!-- Segunda fila para el botón -->
+            <div class="col-ld-12 mt-2" >
+                    <!-- Botón que ocupa todo el ancho de la pantalla -->
+                    <a class="btn btn-secondary btn-block" href="{% url 'editContenido' %}">Volver a editor de contenido</a>
+                </div>
+        </div>
+    </div>
+
+</section>
+<script>
+    function updateOrder(selectElement, contentId, modelName, initialOrder) {
+        var newOrder = selectElement.value;
+
+        // Obtener el token CSRF desde las cookies
+        var csrftoken = getCookie('csrftoken');
+
+        $.ajax({
+            type: 'POST',
+            url: '/cursos/actualizar_orden/' + modelName + '/' + contentId + '/' + newOrder + '/',
+            headers: {'X-CSRFToken': csrftoken},  // Incluir el token CSRF en las cabeceras
+            success: function (data) {
+                if (data.status === 'success') {
+                    // Éxito al actualizar el orden
+                    console.log('Orden actualizado correctamente');
+                    // Actualizar el valor en la interfaz de usuario, por ejemplo, en la fila de la tabla
+                    $('#orden-' + contentId).text(data.new_order);
+
+                    // Llamar a la función para reorganizar la lista sin recargar la página
+                    reorderList();
+                } else {
+                    // Manejar errores, si es necesario
+                    console.error('Error al actualizar el orden');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // Manejar errores de la solicitud Ajax
+                console.error('Error en la solicitud Ajax:', textStatus, errorThrown);
+            }
+        });
+    }
+
+    // Función para obtener el valor de una cookie por su nombre
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Buscar la cookie por el nombre
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function reorderList() {
+        var idCurso = window.location.pathname.split('/')[3];
+        var unidad = window.location.pathname.split('/')[4];
+        
+        $.ajax({
+            type: 'GET',
+            url: '/cursos/listar_material/' + idCurso + '/' + unidad + '/',
+            success: function (data) {
+                // Suponiendo que 'data' es el HTML completo de la página,
+                // extrae solo el HTML de la tabla y actualiza la tabla existente.
+                var newTable = $(data).find('.table-responsive').html(); // Extrae solo el HTML de la tabla
+                $('.table-responsive').html(newTable); // Actualiza solo la tabla
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error('Error en la solicitud Ajax:', textStatus, errorThrown);
+            }
+        });
+    }
+    
+
+
+</script>
+
+
+
+
+
+{% endblock %}

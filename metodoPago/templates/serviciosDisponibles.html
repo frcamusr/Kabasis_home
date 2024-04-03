@@ -1,0 +1,201 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de usuario</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</head>
+
+<body>
+
+    <section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-12 col-md-6 offset-md-3">
+
+                    <div class="card">
+
+                        <div class="card-body">
+
+                            <h2 style="text-align: center;">Servicio a contratar</h2>
+                            <hr>
+                            <p>Elige un Servicio que mejor se adapte a las necesidades de tu equipo. </p>
+                            <form action="{% url 'selmetodopago' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                    <!-- Lista de selección de servicios -->
+                                    <div class="form-group">
+                                        <label for="servicio">Servicio a contratar:</label>
+                                        <select class="form-control" name="plan_id" id="servicio">
+                                            {% for servicio in servicios_disponibles %}
+                                                <option value="{{ servicio.id }}">{{ servicio.description }} - {{ servicio.unit_price }} {{ servicio.currency_id }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Nuevo campo "Tipo de Documento" -->
+                                    <div class="form-group">
+                                        <label for="tipo_documento">Tipo de Documento:</label>
+                                        <select class="form-control" name="tipo_documento" id="tipo_documento">
+                                            <option value="boleta">Boleta</option>
+                                            <option value="factura">Factura</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Contenedor de campos adicionales para "Factura" -->
+                                    <div id="campos_factura" style="display: none;">
+                                        <!-- Campos adicionales -->
+                                        <div class="form-group">
+                                            <label for="rut_empresa">Ingrese RUT empresa:</label>
+                                            <input type="text" class="form-control" name="rut_empresa" id="rut_empresa" placeholder="Ejemplo: 12.345.678-K">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="razon_social">Ingrese su razón social:</label>
+                                            <input type="text" class="form-control" name="razon_social" id="razon_social" placeholder="Empresa SpA">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="giro">Ingrese su Giro:</label>
+                                            <input type="text" class="form-control" name="giro" id="giro">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="direccion_tributaria">Ingrese su Dirección tributaria:</label>
+                                            <input type="text" class="form-control" name="direccion_tributaria" id="direccion_tributaria" placeholder="Calle, numero">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="region">Selecciona la región:</label>
+                                            <select class="form-control" name="region" id="region_select">
+                                                <!-- Opciones de región se cargarán dinámicamente desde el servidor -->
+                                                {% for region in regiones %}
+                                                    <option value="{{ region }}">{{ region }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="comuna">Selecciona la comuna:</label>
+                                            <select class="form-control" name="comuna" id="comuna_select">
+                                                <!-- Opciones de comuna se cargarán dinámicamente desde el servidor -->
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group text-center mt-2">
+                                           <p> Datos de quien compra </p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nombre">Ingrese nombre:</label>
+                                            <!-- Preenchamos automáticamente el campo Nombre con la información de la sesión -->
+                                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre Completo" value="{{ nombre_completo }}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="rut">Ingrese su rut:</label>
+                                            <input type="text" class="form-control" name="rut" id="rut">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="correo">Ingrese su correo:</label>
+                                            <!-- Preenchamos automáticamente el campo Correo con la información de la sesión -->
+                                            <input type="text" class="form-control" name="correo" id="correo" placeholder="correo@mail.com" value="{{ correo }}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="telefono">Ingrese su numero de contacto:</label>
+                                            <input type="text" class="form-control" name="telefono" id="telefono" placeholder="+569xxxxxxxx">
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <!-- Botón "Ir a Pagar" dentro de un div -->
+                                    <div class="form-group">
+                                        <input type="submit" value="Ir a Pagar" class="btn btn-success float-right">
+                                    </div>
+                                </form>
+                                
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script>
+            $(document).ready(function () {
+                // Función para dar formato automático al RUT mientras se escribe
+                $('#rut, #rut_empresa').on('input', function () {
+                    var rut = $(this).val();
+                    // Elimina puntos y guiones existentes del RUT
+                    rut = rut.replace(/[.-]/g, '');
+        
+                    // Divide el RUT en parte entera y dígito verificador
+                    var parteEntera = rut.slice(0, -1);
+                    var digitoVerificador = rut.slice(-1);
+        
+                    // Agrega puntos a la parte entera del RUT
+                    parteEntera = parteEntera.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        
+                    // Combina la parte entera con el dígito verificador y agrega el guion
+                    rut = parteEntera + (digitoVerificador ? '-' + digitoVerificador : '');
+        
+                    // Establece el RUT formateado en el campo de entrada
+                    $(this).val(rut);
+                });
+        
+                // Función para mostrar u ocultar campos según la opción seleccionada
+                function toggleCamposFactura() {
+                    var tipoDocumento = document.getElementById('tipo_documento');
+                    var camposFactura = document.getElementById('campos_factura');
+        
+                    // Si la opción seleccionada es "Factura", muestra los campos adicionales
+                    if (tipoDocumento.value === 'factura') {
+                        camposFactura.style.display = 'block';
+                    } else {
+                        camposFactura.style.display = 'none';
+                    }
+                }
+        
+                // Asigna la función al evento change del campo "Tipo de Documento"
+                document.getElementById('tipo_documento').addEventListener('change', toggleCamposFactura);
+        
+                // Llama a la función al cargar la página para manejar el estado inicial
+                window.onload = toggleCamposFactura;
+        
+                // Agrega un listener para el cambio en la selección de la región
+                $('#region_select').on('change', function () {
+                    var selectedRegion = $(this).val();
+        
+                    // Obtén las comunas correspondientes a la región seleccionada desde el contexto del template
+                    var comunas = {{ comunas_por_region|safe }}[selectedRegion];
+        
+                    // Limpia las opciones actuales de la lista de comunas
+                    $('#comuna_select').empty();
+        
+                    // Agrega las nuevas opciones de comunas desde el contexto del template
+                    $.each(comunas, function (index, value) {
+                        $('#comuna_select').append('<option value="' + value + '">' + value + '</option>');
+                    });
+                });
+            });
+        </script>
+        
+        
+        
+        
+    </body>
+</section>
+
+</html>
+
+{% endblock %}

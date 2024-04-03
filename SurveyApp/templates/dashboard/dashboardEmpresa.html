@@ -1,0 +1,86 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+
+
+
+
+
+<div class="graficoLinea">
+  <canvas id="myChartLine"></canvas>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+
+
+
+
+
+<script>
+const ctx4 = document.getElementById('myChartLine');
+
+// Replace with your actual dates (assuming daily data for 7 days)
+const labels = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
+
+// Replace with your actual average progress values (normalized to 0-100)
+const data4 = {
+  labels: labels,
+  datasets: [{
+    label: 'Promedio Avance del Curso (%)',
+    data: [5, 6, 8, 12, 20, 32, 33], // Replace with actual data
+    borderColor: 'blue',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    datalabels: {
+      color: 'white',
+      formatter: (value, ctx4) => {
+        return value + '%'; // Display percentage value
+      }
+    }
+  }]
+};
+
+const config4 = {
+  type: 'line',
+  data: data4,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Promedio Avance de la empresa en el curso'
+      },
+      datalabels: {
+        display: true,
+        anchor: 'end'
+      }
+    },
+    scales: {
+      y: { // Cambia 'yAxes' a 'y' para Chart.js v3+
+        beginAtZero: true, // Asegúrate de que la escala comienza en cero
+        min: 0, // Establece el valor mínimo de la escala
+        max: 100, // Establece el valor máximo de la escala
+        ticks: {
+          // Forzar a mostrar siempre el cero y el 100
+          callback: function(value) {
+            return value + "%";
+          }
+        }
+      }
+    }
+  },
+};
+
+new Chart(ctx4, config4);
+
+</script>
+
+
+
+
+{% endblock %}

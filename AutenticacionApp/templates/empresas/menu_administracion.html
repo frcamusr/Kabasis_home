@@ -1,0 +1,82 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <h1 class="titulos">Menú de administración</h1>
+    <p class="subtitulos">Administra tu organización</p>
+    <div class="container text-center" style="margin-bottom: 20px;">
+        <div class="row justify-content-center"> <!-- Alinea el contenido al centro -->
+            {% if user.tipo_usuario == 'Administrador Kabasis' %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{% static 'KabasisWebApp/img/administrar_empresa.png' %}" alt="imagen" height="200px">
+                    <div class="card-body" style="background-color: aqua;">
+                        <h1 class="card-title">Administrar Empresas</h1>
+                        <p class="card-text">Administra las empresas vinculadas a la organización.</p>
+                    </div>
+                    <div class="card-footer text-center" style="background-color: bisque;">
+                        <a href="{% url 'listar_empresa' %}" class="btn btn-success">Visitar</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{% static 'KabasisWebApp/img/trabajador2.png' %}" alt="imagen" height="200px">
+                    <div class="card-body" style="background-color: aqua;">
+                        <h1 class="card-title">Administrar Alumnos</h1>
+                        <p class="card-text">Administra los alumnos que interactúan con el sistema.</p>
+                    </div>
+                    <div class="card-footer text-center" style="background-color: bisque;">
+                        <a href="{% url 'lista_usuarios_personalizados' %}?tipo=Alumno" class="btn btn-success">Visitar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center"> <!-- Alinea el contenido al centro -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{% static 'KabasisWebApp/img/areas_empresa.png' %}" alt="imagen" height="200px">
+                    <div class="card-body" style="background-color: aqua;">
+                        <h1 class="card-title">Administrar Áreas</h1>
+                        <p class="card-text">Administrar las áreas de tu empresa.</p>
+                    </div>
+                    <div class="card-footer text-center" style="background-color: bisque;">
+                        <a href="{% url 'lista_areas' %}" class="btn btn-success">Visitar</a>
+                    </div>
+                </div>
+            </div>
+            {% if user.tipo_usuario != 'Asistente Administrativo' %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{% static 'KabasisWebApp/img/asistente3.png' %}" alt="imagen" height="200px">
+                    <div class="card-body" style="background-color: aqua;">
+                        <h1 class="card-title">Administrar Asistentes</h1>
+                        <p class="card-text">Administrar los asistentes administrativos de tu empresa.</p>
+                    </div>
+                    <div class="card-footer text-center" style="background-color: bisque;">
+                        <a href="{% url 'lista_usuarios_personalizados_asistentes' %}" class="btn btn-success">Visitar</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if user.tipo_usuario == 'Administrador Kabasis' %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{% static 'KabasisWebApp/img/menu_administrador.png' %}" alt="imagen" height="200px">
+                    <div class="card-body" style="background-color: aqua;">
+                        <h1 class="card-title">Gestionar Administradores </h1>
+                        <p class="card-text">Gestionar a los administradores de las diferentes empresas.</p>
+                    </div>
+                    <div class="card-footer text-center" style="background-color: bisque;">
+                        <a href="{% url 'lista_usuarios_personalizados_administradores' %}" class="btn btn-success">Visitar</a>
+                    </div>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

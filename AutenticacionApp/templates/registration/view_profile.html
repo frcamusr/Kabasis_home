@@ -1,0 +1,54 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="card" style="border-radius: 20px;">
+                    <div class="text-center">
+                        <button style="margin: 20px 15px 10px;" class="btn btn-info fas fa-arrow-left d-flex float-left"
+                           onclick="goBack()">&nbsp;volver</button>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2>Perfil de Usuario</h2>
+                        <hr>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="img-fluid"
+                                    style="max-width: 200px; max-height: 200px; border-radius: 40%;">
+                                {% else %}
+                                <!-- Agrega la ruta de tu imagen predeterminada aquí -->
+                                <img src="{% static 'KabasisWebApp/img/default_profile3.jpg' %}"
+                                    alt="Imagen Predeterminada" class="img-fluid"
+                                    style="max-width: 200px; max-height: 200px; border-radius: 50%;">
+                                {% endif %}
+                            </div>
+                            <div class="user-details mt-4">
+                                <p><strong>Nombre de Usuario:</strong> {{ user.username }}</p>
+                                <p><strong>Nombres:</strong> {{ user.first_name }}</p>
+                                <p><strong>Apellidos:</strong> {{ user.last_name }}</p>
+                                <p><strong>Rut:</strong> {{ user.rut }}</p>
+                                <p><strong>Tipo de Usuario:</strong> {{ user.tipo_usuario }}</p>
+                                <p><strong>Correo Electrónico:</strong> {{ user.email }}</p>
+                                <p><strong>Razón social:</strong> {{ user.empresa.razon_social }}</p>
+                                <p><strong>Área:</strong> {{ area_nombre }}</p>
+                                
+                                <!-- Agrega más campos de información del usuario según tus modelos -->
+                            </div>
+                        </div>
+                        
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Editar Perfil</a>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "KabasisWebApp/base.html"%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container bg-white p-5 rounded">
+        <h2 class="text-center mb-4">Crear Pregunta</h2>
+        <form method="post" name="crear_preguntaContent" action="#" class="form" id="question-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.question_type|as_crispy_field }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.text.id_for_label }}">Pregunta de Texto</label>
+                <textarea class="form-control" id="{{ form.text.id_for_label }}" name="{{ form.text.name }}" rows="4" maxlength="200">{{ form.text.value }}</textarea>
+            </div>
+            <div class="option-fields" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.option_a|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.option_b|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.option_c|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.option_d|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.correct_answer|as_crispy_field }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.explicacion_correct.id_for_label }}">Explicación de respuesta correcta</label>
+                    <textarea class="form-control" id="{{ form.explicacion_correct.id_for_label }}" name="{{ form.explicacion_correct.name }}" rows="4" maxlength="200">{{ form.explicacion_correct.value }}</textarea>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'listar_quiz' id_quiz %}" class="btn btn-secondary btn-block mt-3">Volver</a>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Crear Pregunta</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var optionFields = document.querySelector('.option-fields');
+    var questionType = document.getElementById('{{ form.question_type.id_for_label }}');
+
+    function toggleFields() {
+        if (questionType.value === 'text') {
+            optionFields.style.display = 'none';
+        } else if (questionType.value === 'option') {
+            optionFields.style.display = 'block';
+        }
+    }
+
+    toggleFields();
+    questionType.addEventListener('change', toggleFields);
+</script>
+
+
+{% endblock %}

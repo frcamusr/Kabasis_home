@@ -1,0 +1,62 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+
+                <div class="card" id="contenido-a-descargar">
+                    <div class="card-header">
+                        <h2 class="text-center">¡Transacción Aprobada!</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Payment ID:</strong> {{ registro_recuperado.payment_id }}</p>
+                        <p><strong>Status:</strong> {{ registro_recuperado.status }}</p>
+                        <p><strong>Payment Type:</strong> {{ registro_recuperado.payment_type }}</p>
+                        <p><strong>Merchant Order ID:</strong> {{ registro_recuperado.merchant_order_id }}</p>
+                        <p><strong>Fecha de Transacción:</strong> {{ registro_recuperado.fecha_transaccion }}</p>
+                        <p><strong>Hora de Transacción:</strong> {{ registro_recuperado.hora_transaccion }}</p>
+                        <p><strong>Usuario:</strong> {{ registro_recuperado.usuario }}</p>
+                        <p><strong>Plan Contratado:</strong> {{ registro_recuperado.id_plan }}</p>
+
+                    </div>
+                </div>
+                <!-- Botón para descargar como PDF -->
+                <div class="d-flex flex-column bd-highlight mb-3">
+                    <a href="#" class="btn btn-primary mt-3" onclick="descargarComoPDF()">Descargar como PDF</a>
+                    <!-- En aprobado.html -->
+                    <a href="{% url 'crearEmpresapago' %}" class="btn btn-success mt-3">Ir a Kabasis</a>
+
+                </div>        
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Script para descargar como PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.js"></script>
+    
+    <script>
+        // Función para descargar como PDF
+        function descargarComoPDF() {
+            const contenido = document.getElementById('contenido-a-descargar');
+            
+            // Configuración para ocultar el botón de descarga en el PDF
+            const options = {
+                margin: 10,
+                filename: 'comprobante_kabasis.pdf',
+                image: { type: 'png', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(contenido).set(options).save();
+        }
+    </script>
+
+    
+    {% endblock %}

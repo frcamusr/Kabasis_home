@@ -1,0 +1,131 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+   .input-group-custom .form-control,
+   .input-group-custom .btn {
+       height: 100px; /* Ajusta según necesites */
+   }
+</style>
+
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="col-12 col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center">
+                    <a class="btn btn-primary fas fa-arrow-left d-flex float-left" href="{% url 'lista_areas' %}">&nbsp;Atrás</a>
+                </div>
+                <h2 class="text-center" style="margin-right: 90px">Crear área</h2>
+                <p style="text-align: center;">Agrega las áreas de tu empresa separadas por saltos de línea</p>
+
+                <form id="form-areas" action="" method="post" class="my-3" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group mb-3 input-group-custom">
+                        <textarea id="nombre-area" class="form-control" placeholder="Nombre del área" rows="4"></textarea>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary d-flex flex-column align-items-center" type="button" id="btn-agregar-area">
+                                <span style="margin-top: 24px;">Agregar área</span>
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <ul id="lista-areas" class="list-group mb-3"></ul>
+                    <input type="hidden" name="nombres" id="nombres-areas">
+
+                    <div class="d-flex justify-content-center my-3">
+                        <input type="reset" value="Limpiar" class="btn btn-secondary mx-2">
+                        <input type="submit" value="Guardar" class="btn btn-primary mx-2">
+                    </div>
+                </form>
+                {{ mensaje }}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Mensajes de error -->
+{% if messages or errores %}
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        // Encadenar promesas para mostrar los mensajes uno después del otro
+        let promiseChain = Promise.resolve();
+
+        // Primero, mostrar mensajes de éxito
+        {% for message in messages %}
+        promiseChain = promiseChain.then(function() {
+            return Swal.fire({
+                icon: 'success', // Asumiendo que todos son de éxito
+                title: '¡Éxito!',
+                text: '{{ message|escapejs }}',
+            });
+        });
+        {% endfor %}
+
+        // Luego, mostrar mensajes de error
+        {% for mensaje in errores %}
+        promiseChain = promiseChain.then(function() {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Atención',
+                text: '{{ mensaje }}',
+            });
+        });
+        {% endfor %}
+    });
+</script>
+{% endif %}
+<!-- Fin Mensajes de error-->
+
+<script>
+    document.getElementById('btn-agregar-area').addEventListener('click', function() {
+        var textoAreas = document.getElementById('nombre-area').value.trim();
+        var nombresAreas = textoAreas.split('\n');
+        var lista = document.getElementById('lista-areas');
+
+        if (!textoAreas) {
+            alert('Por favor, ingrese el nombre del área antes de agregar.');
+        } else {
+            nombresAreas.forEach(function(nombreArea) {
+                if (nombreArea.trim() !== '') {
+                    var elemento = crearElementoLista(nombreArea.trim());
+                    lista.appendChild(elemento);
+                }
+            });
+            document.getElementById('nombre-area').value = '';
+            actualizarNombresAreas();
+        }
+    });
+
+    function crearElementoLista(nombreArea) {
+        var lista = document.getElementById('lista-areas');
+        var elemento = document.createElement('li');
+        elemento.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+        var nombreSpan = document.createElement('span');
+        nombreSpan.textContent = nombreArea;
+        elemento.appendChild(nombreSpan);
+
+        var btnEliminar = document.createElement('button');
+        btnEliminar.textContent = 'Quitar';
+        btnEliminar.classList.add('btn', 'btn-danger', 'btn-sm');
+        btnEliminar.onclick = function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            lista.removeChild(elemento);
+            actualizarNombresAreas();
+        };
+        elemento.appendChild(btnEliminar);
+        return elemento;
+    }
+
+    function actualizarNombresAreas() {
+        var elementosLista = document.querySelectorAll('#lista-areas li span');
+        var nombres = Array.from(elementosLista).map(el => el.textContent);
+        document.getElementById('nombres-areas').value = nombres.join('\n');
+    }
+</script>
+
+{% endblock %}

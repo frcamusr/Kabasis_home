@@ -1,0 +1,156 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+
+
+
+
+{% if promedio_actitud == None %}
+<div class="alert alert-warning" role="alert">
+  Nadie de su organización ha completado el test inicial.
+</div>
+{% else %}
+<div class="graficoLinea">
+  <canvas id="myHorizontalBarChart2"></canvas>
+  <!-- Botones utilizando Bootstrap -->
+  <div class="btn-group" role="group" aria-label="Basic example" style="margin-top: 20px;">
+    <button type="button " class="btn btn-primary mx-1 active" id="btnFactor">Ver grafico por factor</button>
+    <button type="button " class="btn btn-primary mx-1" id="btnDimensiones">Ver grafico por dimensiones</button>
+    <button type="button " class="btn btn-primary mx-1" id="btnItems">Ver grafico por ítems</button>
+  </div>
+</div>{% endif %}
+
+<div>
+  <hr>
+</div>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+
+
+
+
+  <script>
+    let myChart = null;
+    // Inicializa myChart como null para comprobar si el gráfico ya fue creado
+    let resultados = JSON.parse('{{ resultados_json|safe }}');
+
+    
+    function actualizarGrafico(data) {
+      // Si ya existe un gráfico, lo destruimos
+      if (myChart !== null) {
+        myChart.destroy();
+      }
+    
+      // Crea un nuevo gráfico con el nuevo conjunto de datos
+      const ctx = document.getElementById('myHorizontalBarChart2').getContext('2d');
+      myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data, // Usa el conjunto de datos pasado a la función
+        options: {
+          indexAxis: 'y',
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 100
+            }
+          },
+          responsive: true
+        }
+      });
+    }
+    
+    // Define los datos iniciales del gráfico por "factor" y por "dimensión" aquí...
+    let dataPorFactor = {
+      labels: [
+      'Conductas asociadas a Seguridad de la Información',
+      'Conocimiento sobre Seguridad de la Información',
+      'Actitudes hacia la Seguridad de la Información',
+      'KABASIS Index'],
+      datasets: [{
+        label: 'Resultado Survey Inicial (%)',
+        data: [
+          {{ promedio_conducta }},
+          {{ promedio_conocimientos }},
+          {{ promedio_actitud }},
+          // Calcula el promedio inicial para "KABASIS Index"
+          ({{ promedio_conducta }} + {{ promedio_conocimientos }} + {{ promedio_actitud }}) / 3
+        ],
+        borderColor: 'blue',
+        // Usa un array para definir colores específicos para cada barra, azul para el promedio
+        backgroundColor: ['rgba(133, 20, 0, 0.7)', 'rgba(133, 20, 0, 0.7)', 'rgba(133, 20, 0, 0.7)', 'blue'],
+      }]
+    };
+    
+    // Reorganiza los datos para "dataPorDimension" según los grupos especificados
+    let dataPorDimension = {
+      labels: [
+        'Prácticas de Seguridad en el Entorno de Trabajo', 'Prácticas de Respaldo y Actualización de Datos', 'Prácticas de Gestión de Contraseñas', 'Conocimientos de Riesgos al navegar en internet', 'Prácticas de Seguridad en Correo Electrónico', // Grupo A
+        'Conocimiento de sitios seguros en internet', 'Conocimiento de modo de actuar de hackers', 'Conocimiento de actuar de malwares', // Grupo B
+        'Proactividad en la Denuncia de Amenazas Informáticas', 'Capacitación y Concientización en Seguridad de la Información', 'Percepción del Nivel de Protección frente a riesgos cibernéticos', 'Cumplimiento de Políticas de Seguridad de la Información', 'Compromiso Organizacional con Seguridad de la Información', 'Monitoreo y Cumplimiento de Prácticas de Seguridad de la Información' // Grupo C
+      ],
+      datasets: [{
+        label: 'Resultado Survey por Dimensión (%)',
+        data: [
+          {{ promedio_seg_exterior }}, {{ promedio_seg_computador }}, {{ promedio_contrasena }}, {{ promedio_navegar }}, {{ promedio_correos }},
+          {{ promedio_sitios_seg }}, {{ promedio_hackers }}, {{ promedio_virus }},
+          {{ promedio_denuncia }}, {{ promedio_entrenamiento }}, {{ promedio_riesgos }}, {{ promedio_politicas }}, {{ promedio_compromiso }}, {{ promedio_disuasion }}
+        ],
+        borderColor: 'blue',
+        // Define los colores para cada grupo
+        backgroundColor: [
+          'rgba(0, 123, 255, 0.7)', 'rgba(0, 123, 255, 0.7)', 'rgba(0, 123, 255, 0.7)', 'rgba(0, 123, 255, 0.7)', 'rgba(0, 123, 255, 0.7)', // Grupo A
+          'rgba(255, 193, 7, 0.7)', 'rgba(255, 193, 7, 0.7)', 'rgba(255, 193, 7, 0.7)', // Grupo B
+          'rgba(40, 167, 69, 0.7)', 'rgba(40, 167, 69, 0.7)', 'rgba(40, 167, 69, 0.7)', 'rgba(40, 167, 69, 0.7)', 'rgba(40, 167, 69, 0.7)', 'rgba(40, 167, 69, 0.7)' // Grupo C
+        ],
+      }]
+    };
+
+
+    let labels = resultados.map(item => item[0]);
+    let data = resultados.map(item => item[1]);
+
+    let dataPorItems = {
+      labels: labels,
+      datasets: [{
+        label: 'Resultado Survey por Items (%)',
+        data: data,
+        borderColor: 'blue',
+        backgroundColor: [
+          // Asegúrate de tener suficientes colores para todos tus items o considera generarlos dinámicamente
+          'rgba(0, 123, 255, 0.7)', 
+          // ... otros colores según necesites
+        ],
+      }]
+    };
+
+
+    
+    // Event listeners para los botones
+    document.getElementById('btnFactor').addEventListener('click', function() {
+      actualizarGrafico(dataPorFactor);
+    });
+    
+    document.getElementById('btnDimensiones').addEventListener('click', function() {
+      actualizarGrafico(dataPorDimension);
+    });
+
+    document.getElementById('btnItems').addEventListener('click', function() {
+      actualizarGrafico(dataPorItems);
+    });
+    
+    // Inicializa el gráfico con el conjunto de datos por "factor" por defecto al cargar la página
+    actualizarGrafico(dataPorFactor);
+  </script>
+
+
+
+
+
+
+{% endblock %}

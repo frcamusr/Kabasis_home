@@ -1,0 +1,36 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center mb-4">Vista Previa de Preguntas</h2>
+                
+                {% for pregunta in questions %}
+                    <div class="question mb-4">
+                        <h5>{{ forloop.counter }}. {{ pregunta.text }}</h5>
+                        
+                        {% if pregunta.question_type == 'text' %}
+                            <p>Respuesta de texto: ________________</p>
+                        {% elif pregunta.question_type == 'option' %}
+                            <p>Opciones:</p>
+                            <p>a. {{ pregunta.option_a }}</p>
+                            <p>b. {{ pregunta.option_b }}</p>
+                            <p>c. {{ pregunta.option_c }}</p>
+                            <p>d. {{ pregunta.option_d }}</p>
+                        {% endif %}
+                        
+                        <hr>
+                    </div>
+                {% empty %}
+                    <p>No hay preguntas</p>
+                {% endfor %}
+                
+                <a href="{% url 'listar_quiz' id %}" class="btn btn-primary">Volver a Preguntas del Quiz</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

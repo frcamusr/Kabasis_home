@@ -1,0 +1,46 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 style="text-align: center;">Selecciona tu Método de Pago</h2>
+                        <hr>
+                        <p>
+                            realiza el pago de forma segura usando, selecciona un medio de pago
+                        </p>
+                        <div id="payment-button"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+
+    <script>
+        // Inicialización del SDK de Mercado Pago con tu clave pública
+        const mp = new MercadoPago('TEST-fa216a1b-c780-44ef-aff7-0bf4eaa79eb4');
+
+        // Creación del botón de pago
+        mp.bricks().create("wallet", "payment-button", {
+            initialization: {
+                preferenceId: "{{ preference.id  }}",  // Utiliza el ID de preferencia desde el back-end
+                redirectMode: "modal",
+            },
+        });
+    </script>
+
+{% endblock %}
+
+

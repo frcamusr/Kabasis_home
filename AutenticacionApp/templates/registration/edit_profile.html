@@ -1,0 +1,37 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="card">
+                <div class="text-center">
+                    <button style="margin: 20px 15px 10px;" class="btn btn-info fas fa-arrow-left d-flex float-left"
+                       onclick="goBack()">&nbsp;volver</button>
+                </div>
+                <div class="card-body">
+                    <h2 style="text-align: center;">Editar Perfil</h2>
+                    {% if user.is_first_login == True %}
+                        <p style="text-align: center;">Como es la primera vez que ingresas se recomienda encarecidamente que cambies tu contraseña y registres tu información personal.</p>
+                    {% endif %}
+                    <hr>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-flex justify-content-center my-3">
+
+                            
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>                           
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

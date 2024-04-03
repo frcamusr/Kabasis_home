@@ -1,0 +1,55 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Carga Masiva de Usuarios</title>
+</head>
+
+<body>
+    <section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <a style="margin-bottom: 10px;" class="btn btn-primary fas fa-arrow-left d-flex float-left" href="{% url 'crear_usuario_personalizado' %}"> &nbsp;&nbsp;Crear Usuario personalizado</a>
+                            </div>
+                              
+                            <h1 style="margin-top: 50px; text-align: center;">Carga Masiva de Usuarios</h1>
+
+                            <p class="text-center">En esta sección podrás ingresar los usuarios de forma masiva por medio de un arhchivo CSV o xlsx</p>
+
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form|crispy }}  <!-- O simplemente {{ form }} -->
+                                <button class="btn btn-success float-right" type="submit">Cargar Usuarios</button>
+                                <br><br>
+                                <p>
+                                    El archivo precargado debe contener todos los correos de los usuarios 
+                                    que desea ingresar al sistema, el usuario debe ingresar con su correo y la contraseña que se le proporcionará.
+                                </p>                               
+                                <div class="image_container_masiva">
+                                    <img class="intro_img_masiva img-fluid mb-3 mb-lg-0 rounded" src="{% static 'KabasisWebApp/img/referencia_archivo_excel.jpg' %}" alt="">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+</body>
+
+</html>
+
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "KabasisWebApp/base.html" %}
+
+
+
+{% load static %}
+
+
+{% block content %}
+<section class="section-cursos">
+    <h1 style="color: white; text-align: center;">Unidades del curso</h1>
+    <div class=" container"> <!-- Mantén esta modificación -->
+        {% if user.tipo_usuario == "Administrador Kabasis" %}
+            <div class="text-center">
+                <a class="btn btn-info btn-block" href="{% url 'listar_unidad' curso.id %}"
+                    style="margin-bottom: 20px; border-radius: 15%;">Administrar unidades</a>
+                <a class="btn btn-info btn-block" href="{% url 'editContenido' %}" 
+                    style="margin-bottom: 20px; border-radius: 15%;">Editar Contenido</a>
+            </div>
+        {% endif %}
+
+        <!-- Resto de tu código -->
+
+        <div class="row d-flex justify-content-center">
+            <div>
+                {% for unidad in unidades %}
+                <div class="outer-circle mb-3 {% if forloop.counter|divisibleby:2 %}padding-left{% else %}padding-right{% endif %}">                    <!-- Código para los dos primeros botones -->
+                    <div class="circular-border"></div>
+                    <div class="dropdown">
+                        <button class="circular-button mb-3 {% if unidad.aprobada %}circular-button-aprobado{% else %}circular-button-no-aprobado{% endif %}" 
+                        data-unidad-id="{{ unidad.id }}" 
+                        data-es-aprobado="{{ unidad.aprobada|yesno:'true,false' }}" 
+                        onclick="handleButtonClick(this)" 
+                        type="button" id="dropdownMenuButton{{ unidad.id }}" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         {% if unidad.aprobada %}
+                            <img src="{% static 'KabasisWebApp\img\check_aprobado.jpg' %}" alt="Aprobado">
+                            {% elif not unidad.aprobado and unidad.id != unidad_siguiente.id %}
+                            <img src="{% static 'KabasisWebApp\img\noaprobado.jpg' %}" alt="Aprobado">
+                            {% elif unidad.imagen and unidad.id == unidad_siguiente.id %}
+                            <img src="{{ unidad.imagen.url }}" alt="{{ unidad.titulo }}">
+                            {% else %}
+                            No imagen
+                            {% endif %}
+                        </button>
+                        {% if not forloop.last %}
+                        <div class="path horizontal {% if forloop.counter|divisibleby:2 %}path-even{% else %}path-odd{% endif %} {% if unidad.aprobada %}path-aprobado{% endif %}" id="horizontal-rectangle-path-{{ forloop.counter }}"></div>
+                        <div class="path vertical {% if forloop.counter|divisibleby:2 %}path-even{% else %}path-odd{% endif %} {% if unidad.aprobada %}path-aprobado{% endif %}" id="vertical-rectangle-path-{{ forloop.counter }}"></div>
+
+                        {% endif %}
+
+                        <div class="dropdown-menu {% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}" aria-labelledby="dropdownMenuButton{{ unidad.id }}">                                
+                            <h3>{{ unidad.titulo }}</h3>
+                            <div class="texto-ventana" id="contenidoUnidad{{ unidad.id }}" class="text-center contenido-unidad" style="padding: 10px 20px 0 20px;">
+                                <!-- Aquí se cargarán los botones con los títulos de los contenidos -->
+                            </div>
+                            <!-- Agrega más opciones según sea necesario -->
+                        </div>
+                    
+                    </div>
+
+                </div>
+
+
+                {% endfor %}
+
+                <div style="text-align: center; margin-top: 100px; margin-bottom: 20px;">
+                    <a href="{% url 'descargar_certificado' %}" class="btn btn-primary">Descargar Certificado</a>
+                </div>
+        
+            </div>
+
+            
+        </div>
+        
+        
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    var idUnidadSiguiente = {{ unidad_siguiente.id|default:"null" }};
+    function handleButtonClick(button) {
+        var idUnidadSeleccionada = button.dataset.unidadId;
+        var esAprobado = button.dataset.esAprobado === 'true';
+    
+        // Permitir acceso si la unidad está aprobada o es la unidad siguiente
+        if (!esAprobado && parseInt(idUnidadSeleccionada) !== idUnidadSiguiente) {
+            alert('Esta unidad no está disponible.');
+            return; // Evitar cargar el contenido si la unidad no está aprobada y no es la siguiente
+        }
+    
+        // Procede con la solicitud AJAX para obtener los contenidos
+        $.ajax({
+            url: "{% url 'obtener_contenidos' %}",
+            type: "GET",
+            data: { unidad_id: idUnidadSeleccionada },
+            dataType: "json",
+            success: function (data) {
+                actualizarContenidos(data, idUnidadSeleccionada);
+            },
+            error: function (error) {
+                console.log("Error en la solicitud AJAX: ", error);
+            }
+        });
+    }
+    
+
+    function actualizarContenidos(data, unidadId) {
+        var contenidoDiv = $("#contenidoUnidad" + unidadId);
+        contenidoDiv.empty();
+
+        if (data.length > 0) {
+            $.each(data, function(index, contenido) {
+                var botonClase = contenido.visto ? "btn-success" : "btn-info";
+                var botonTexto = $("<span>").text(contenido.titulo).css({"flex-grow": "1", "text-align": "left"});
+                var imagen = contenido.visto ? $("<img>", {
+                    src: '/media/cursos/completado.png',
+                    style: 'height: 1.5em; margin-left: 10px;'
+                }) : "";
+    
+                var boton = $("<button>")
+                    .addClass(`btn ${botonClase} btn-block mb-3 d-flex align-items-center justify-content-between`)
+                    .attr("data-contenido-id", contenido.id)
+                    .append(botonTexto)
+                    .append(imagen)
+                    .on('click', function() {
+                        if (contenido.video_url) {
+                            window.location.href = "{% url 'ver_video' video_id=0 %}".replace('0', contenido.id);
+                        } else {
+                            window.location.href = "{% url 'formulario2' id=0 %}".replace('0', contenido.id);
+                        }
+                    });
+    
+                contenidoDiv.append(boton);
+            });
+        } else {
+            contenidoDiv.append("<p>No hay contenido disponible.</p>");
+        }
+    }
+    
+</script>
+
+
+{% endblock %}

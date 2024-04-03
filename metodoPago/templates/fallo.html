@@ -1,0 +1,26 @@
+{% extends "KabasisWebApp/base.html" %} {% load static %} {% load
+    crispy_forms_tags %} {% block content %}
+    <section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-6 offset-md-3">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="text-center">Transacción Fallida</h2>
+              </div>
+              <div class="card-body">
+                <p>
+                  Hubo un error al procesar tu pago. Por favor, intenta nuevamente.
+                </p>
+              </div>
+            </div>
+            <div class="d-flex flex-column bd-highlight mb-3">
+              <a href="#" class="btn btn-success mt-3">Ir a Kabasis</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    {% endblock %}
+    

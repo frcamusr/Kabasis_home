@@ -1,0 +1,1 @@
+export PYTHONPATH=$PYTHONPATH:C:/Users/Spare/Desktop/KabasisWeb3/AutenticacionApp/forms

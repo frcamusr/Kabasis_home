@@ -1,0 +1,46 @@
+{% extends "KabasisWebApp/base.html"%}
+
+{% load static %}
+   
+{% block content%}
+
+   
+
+      <div class="row">
+
+         <div class="col-12 col-md-6 offset-md-3">  
+            
+            <div class="card">
+
+               <div class="card-body">
+
+             
+                <div class="text-center">
+                    <button class="btn btn-info fas fa-arrow-left d-flex float-left" onclick="goBack()">&nbsp;volver</button>
+                </div>
+
+                 <h2 class="text-center" style="margin-right: 90px">Modificar video</h2>
+
+
+                  <form action="" method="post" class="my-3" enctype="multipart/form-data">  <!-- Agregar una clase 'my-3' para ajustar el margen vertical -->
+                     {% csrf_token %}
+                     {{ form }}
+                     <div class="d-flex justify-content-center my-3">  <!-- Agregar una clase 'my-3' para ajustar el margen vertical -->
+                         <input type="reset" value="Limpiar" class="btn btn-secondary mx-2">
+                         <input type="submit" value="Modificar" class="btn btn-primary mx-2">
+                     </div>
+                 </form>
+                 {{mensaje}}
+                 
+
+               </div>
+
+            </div>
+
+         </div>
+
+      </div>
+
+
+
+{% endblock %}

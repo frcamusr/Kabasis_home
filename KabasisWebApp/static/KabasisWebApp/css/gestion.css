@@ -1,0 +1,794 @@
+
+
+body {
+  font-family: 'Arial' !important;
+  background: linear-gradient(rgba(46, 34, 30, 0.65), rgba(12, 7, 5, 0.65)), url("../img/imagenfondo2.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+
+  .cartas-info-empresa .custom-card {
+    background: url('../img/fondoruido.png');
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.6); /* Sombra suave */
+    border: none; /* Opcional: elimina el borde de la tarjeta si lo prefieres */
+  }
+  
+  .cartas-info-empresa .card-body h6, .cartas-info-empresa .card-body h2 {
+    color: white; /* Asegura que los títulos también sean blancos */
+  }
+
+ 
+.contenedorPie{
+  margin: 0 20px
+}
+.graficoPie{
+  height: 350px;
+}
+
+
+
+
+.grafico{
+  width: 30vw;
+  float: left;
+}
+.separacion2{
+  height: 100px;
+}
+.cartas-info-empresa{
+  margin: 0 20px 0 20px;
+  
+}
+.order-card{
+  height: 130px;
+}
+
+.graficoLinea {
+  margin: 0 200px;
+  height: 65vh;
+}
+
+.graficoLinea canvas {
+  aspect-ratio: 1 / 2; /* Establece una relación de aspecto cuadrada */
+
+
+}
+
+
+
+.contenedor-graficos {
+  margin-top:50px;
+  display: flex;
+  margin-bottom: 70px;
+}
+
+
+/* Nuevo estilo para la landing page */
+.landing {
+  background-color: rgb(22, 22, 22);
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+.section-cursos{
+  background: url('../img/fondoHome.jpg');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Raleway';
+}
+
+p {
+  line-height: 1.75;
+}
+
+.text-faded {
+  color: rgba(255, 255, 255, 0);
+}
+
+.site-heading {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  text-transform: uppercase;
+  line-height: 1;
+  font-family: 'Raleway';
+}
+
+.site-heading .site-heading-upper {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.site-heading .site-heading-lower {
+  font-size: 5rem;
+  font-weight: 100;
+  line-height: 4rem;
+}
+
+.page-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-heading {
+  text-transform: uppercase;
+}
+
+.section-heading .section-heading-upper {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+  padding-bottom: .5rem;
+
+}
+
+.section-heading .section-heading-lower {
+  display: block;
+  font-size: 30px;
+  font-weight: 100;
+  color: white
+}
+
+
+.section-heading .section-heading-under {
+  display: block;
+  font-size: 1rem;
+  text-transform: none;
+  font-weight: 300;
+  margin-top: .5rem;
+}
+
+
+.bg-faded {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+#mainNav {
+  background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+  /* Fondo degradado */
+  font-family: 'Arial' !important; 
+}
+
+#mainNav .navbar-brand {
+  color: #ffffff;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+}
+
+#mainNav .navbar-nav .nav-item.active .nav-link {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+@media (min-width: 992px) {
+  #mainNav .navbar-nav .nav-item .nav-link {
+    font-size: 0.9rem;
+  }
+
+  #mainNav .navbar-nav .nav-item .nav-link:hover {
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: underline;
+  }
+
+  #mainNav .navbar-nav .nav-item.active .nav-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    font-family: 'Arial' !important; 
+  }
+}
+
+.btn-xl {
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-family: 'Times New Roman', Times, serif;
+  
+}
+
+.intro {
+  position: relative;
+}
+
+@media (min-width: 992px) {
+  .intro .intro-img {
+    width: 70%;
+    float: left;
+  }
+
+  .intro .intro-text {
+    left: 600;
+    height: 485px;
+    width: 60%;
+    margin-top: 7rem;
+    background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+    /* Fondo degradado */
+    color: cornsilk;
+    position: absolute;
+    top: -90px;
+  }
+
+  .intro .intro-text .intro-button {
+    width: 100%;
+    left: 0;
+    position: absolute;
+    bottom: -2rem;
+  }
+}
+
+
+@media (min-width: 992px) {
+  .intro .intro-img {
+    width: 70%;
+    float: left;
+  }
+
+  .intro .intro-text {
+    left: 600;
+    height: 485px;
+    width: 60%;
+    margin-top: 7rem;
+    background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+     /*Fondo degradado */
+    color: cornsilk;
+    position: absolute;
+    top: -90px;
+  }
+  .intro .intro-text .intro-button {
+    width: 100%;
+    left: 0;
+    position: absolute;
+    bottom: -2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .intro1 {
+    display: flex; /* Usa Flexbox para alinear elementos */
+    align-items: center; /* Alinea verticalmente */
+    justify-content: center; /* Centra los elementos horizontalmente */
+  }
+
+  .intro1 .intro-img1 {
+    width: 50%; /* Ajusta según necesites */
+    float: none; /* Elimina float para trabajar con Flexbox */
+    margin-right: 20px; /* Espacio entre la imagen y el texto */
+  }
+
+  .intro1 .intro-text1 {
+    width: 50%; /* Ajusta según necesites */
+    height: 280px;
+    margin-top: 0; /* Ajusta según necesites */
+    position: relative; /* Cambia a relative si es necesario */
+    right: 80px;
+    left: auto; /* Restablece la posición left */
+    top: auto; /* Restablece la posición top */
+    background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+    color: white;
+    
+  }
+
+  .intro1 .intro-text1 .intro-button1 {
+    width: 100%;
+    left: 0;
+    position: absolute;
+    bottom: -2rem;
+  }
+}
+
+
+@media (min-width: 1200px) {
+  .intro .intro-text {
+    width: 45%;
+  }
+}
+
+.cta {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+  /* Fondo degradado */
+}
+
+.cta .cta-inner {
+  position: relative;
+  padding: 3rem;
+  margin: 0.5rem;
+  background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+
+  color: cornsilk;
+}
+
+.cta .cta-inner:before {
+  border-radius: 0.5rem;
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  bottom: -0.5rem;
+  left: -0.5rem;
+  right: -0.5rem;
+  border: 0.25rem solid rgba(255, 255, 255, 0.85);
+}
+
+.cta .cta-innerv {
+  position: relative;
+  padding: 3rem;
+  margin: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+@media (min-width: 992px) {
+  .about-heading .about-heading-img {
+    position: relative;
+    z-index: 0;
+  }
+
+  .about-heading .about-heading-content {
+    margin-top: -5rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .product-item .product-item-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: -3rem;
+  }
+
+  .product-item .product-item-img {
+    position: relative;
+    z-index: 0;
+    max-width: 60vw;
+  }
+
+  .product-item .product-item-description {
+    position: relative;
+    z-index: 1;
+    margin-top: -3rem;
+    max-width: 50vw;
+  }
+}
+
+
+
+@media (min-width: 992px) {
+  .list-hours {
+    width: 50%;
+    font-size: 1.1rem;
+  }
+}
+
+.address strong {
+  font-size: 1.2rem;
+}
+
+.footer {
+  background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+  /* Fondo degradado */
+  font-family: Arial !important;
+}
+
+
+
+
+.btn {
+  box-shadow: 0px 3px 3px 0px rgba(33, 37, 41, 0.1);
+}
+
+
+
+.font-weight-light {
+  font-weight: 100 !important;
+}
+
+.mbtm {
+  padding-top: 5rem;
+}
+
+.mbt {
+  padding-top: 2rem;
+}
+
+.mbt1 {
+  padding-top: 1.25rem;
+}
+
+a.link {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+a.link:hover {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.4);
+}
+#landingNav{
+  background-color: rgb(0, 0, 0 , 0.9);
+  
+}
+.separacion{
+  margin-top: 100px;
+}
+.section-content {
+  font-family: 'Lora' !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 28px !important;
+}
+
+ul.errorlist {
+  padding-top: .75rem;
+  font-style: italic;
+  color: red;
+}
+
+/*Icono Kabasis portada-cabecera*/
+.imagen-kabasis {
+  display: block;
+  /* Para convertir la imagen en un elemento en bloque */
+  margin: 0 auto;
+  /* Para centrar horizontalmente la imagen */
+  max-width: 20%;
+  /* Ajusta el ancho máximo según tus necesidades */
+  /* Otros estilos si los necesitas */
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+
+/*iconos triada kab*/
+.icon-container {
+  display: flex;
+  justify-content: center;
+  /* Alinea los iconos en el centro horizontal */
+}
+
+.icon {
+  text-align: center;
+  margin: 20px;
+  /* Agrega márgenes para separar los iconos */
+  flex: 1;
+  /* Esto permite que los iconos ocupen espacios iguales en el contenedor flex */
+}
+
+/*fin iconos triada kab*/
+
+
+.video-container {
+  max-width: 100%;
+  /* Establece un ancho máximo para el contenedor del video */
+  width: 80%;
+  /* Ajusta el ancho del contenedor según tus necesidades */
+  margin: 0 auto;
+  /* Centra el contenedor horizontalmente en la sección */
+}
+
+
+.video-container iframe {
+  width: 100%;
+  /* El video ocupará todo el ancho del contenedor */
+  height: 100%;
+  /* El video ocupará toda la altura del contenedor */
+}
+
+
+.boton-volver {
+  background-color: blue;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.boton-volver i {
+  margin-right: 5px;
+}
+
+
+/* .kabasis-color {
+  background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6));
+} */
+
+/* .kabasis-boton {
+  background-image: linear-gradient(to top, blue, blue, blue);
+  color: white; 
+
+}
+*/
+
+.kabasis-boton:hover {
+  background-image: linear-gradient(to top, rgb(63, 63, 250), rgb(73, 73, 252), rgb(112, 112, 252));
+  /* Mantiene el gradiente en :hover */
+  color: white;
+  
+  /* Cambia el color de texto al pasar el mouse */
+  /* Puedes ajustar otros estilos de fondo en :hover según tus preferencias */
+}
+
+
+
+
+/* inicio estilo para template ver_curso */
+/* Estilos para botones circulares */
+.circular-button {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  display: flex;
+  margin-bottom: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  animation: float 1.5s ease-in-out infinite;
+  position: relative; /* Esto es necesario para z-index */
+  z-index: 3; /* Mayor que el de los caminos */
+}
+.circular-button-aprobado {
+  border: 4px solid rgb(74, 202, 0); /* Borde verde para unidades aprobadas */
+  opacity: 0.92;
+}
+.circular-button-no-aprobado {
+  border: 4px solid rgb(255, 0, 0); /* Borde rojo para unidades no aprobadas */
+}
+.circular-button img {
+  width: 100%;
+  height: 100%;
+  scale: 1.1;
+  object-fit: cover;
+}
+/* Estilos para los botones */
+.row.d-flex.justify-content-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 -50px;
+  margin-bottom: auto;
+  /* Ajusta este valor según sea necesario */
+}
+.outer-circle {
+  flex: 0 0 auto;
+  text-align: center;
+  margin: 70px;
+  position: relative; /* Esto es necesario para z-index */
+  z-index: 3; /* Esto asegura que el círculo esté encima de los caminos */
+    /* Ajusta este valor según sea necesario */
+}
+.padding-left {
+  padding-left: 500px;
+}
+.padding-right {
+  padding-right: 500px;
+}
+.path {
+  /* Estilos base para tus rectángulos */
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2; /* Menor que el de los botones circulares */
+}
+/* Para el camino vertical */
+.vertical.path-aprobado {
+  background: linear-gradient(180deg, rgba(0, 128, 0, 1) 0%, rgba(0, 180, 0, 1) 50%, rgba(0, 128, 0, 1) 100%);
+  opacity: 1;
+}
+/* Para el camino horizontal */
+.horizontal.path-aprobado {
+  background: linear-gradient(90deg, rgba(0, 128, 0, 1) 0%, rgba(0, 180, 0, 1) 50%, rgba(0, 128, 0, 1) 100%);
+  opacity: 1;
+}
+/* Suponiendo que los botones circulares tienen un tamaño fijo y están espaciados uniformemente */
+.horizontal {
+  position: absolute;
+  width: 430px;
+  height: 52px;
+  margin-top: -150px;
+  /* El margin-left base se establece en el .path */
+}
+.vertical{
+  position: absolute;
+  width: 52px;
+  height: 160px;
+  margin-top: -98px;
+}
+
+/* Para los elementos con índice impar (1, 3, 5, ...) */
+.horizontal.path-odd {
+  margin-left: 192px;
+  border-radius: 0 50px 0  0;
+}
+/* Para los elementos con índice par (2, 4, 6, ...) */
+.horizontal.path-even {
+  margin-left: -417px;
+  border-radius: 50px 0 0 0;
+}
+.vertical.path-odd {
+  margin-left: 570px;
+}
+/* Para los elementos con índice par (2, 4, 6, ...) */
+.vertical.path-even {
+  margin-left: -417px;
+}
+.dropdown-menu{
+  text-align: center;
+  z-index:3;
+  background-color: rgb(0, 0, 0 , 0.8);
+  width: 300px;
+  min-block-size: 200px;
+}
+.dropdown-menu h3{
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+}
+.dropdown-menu.left {
+  left: auto !important;
+  transform: translateX(-100%) !important; /* Asegúrate de que el menú se alinea con el borde izquierdo del botón */
+}
+.dropdown-menu.right {
+  left: 100% !important; /* Mueve el menú hacia la derecha del botón */
+  transform: translateX(0%) !important; /* Asegúrate de que el menú se alinea con el borde derecho del botón */
+}
+    /* Fin Estilo para template ver_cursos */
+
+
+
+
+    
+@keyframes float {
+  0% {
+    box-shadow: 0 5px 15px 10px rgba(0, 0, 0, 0.8);
+    transform: translateY(0px);
+  }
+
+  50% {
+    box-shadow: 0 25px 15px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-20px);
+  }
+
+  100% {
+    box-shadow: 0 5px 15px 10px rgba(0, 0, 0, 0.8);
+    transform: translateY(0px);
+  }
+}
+
+.titulo-cursos {
+
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  /* Para aumentar el grosor del texto */
+  font-family: Arial, sans-serif;
+  /* Establecer la fuente como Arial */
+
+}
+
+
+.boton_form_invitacion {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.boton_form_invitacion:hover {
+
+  background-color: #0056b3;
+
+}
+
+.input_form_invitacion {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.boton_form_link {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.boton_form_link:hover {
+
+  background-color: #0056b3;
+
+}
+
+.input_form_link {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.image_container_masiva {
+  text-align: center;
+}
+
+.intro_img_masiva {
+  display: inline-block; /* Para que el texto no se colapse debajo de la imagen */
+}
+
+/* Estilos para los mensajes de error del CAPTCHA */
+.captcha-error-list {
+  color: red; /* Cambia este color según tus necesidades */
+  list-style-type: none; /* Elimina los puntos de lista */
+  padding: 0; /* Ajusta el padding si es necesario */
+  /* Agrega aquí cualquier otro estilo que necesites */
+}
+
+.captcha-error-list li {
+  list-style-type: none;
+}
+
+.linksCategorias {
+
+  color: white !important;
+  text-decoration: underline;
+
+}
+
+.linksCategorias:hover {
+  text-decoration: none;
+}
+
+.contenedorFormulario {
+
+  background-color: rgb(46, 19, 166);
+  width: 50%;
+  margin: 10px auto;
+}
+
+
+/*Estilos del formulario de crear areas*/
+
+.input-group-custom .form-control,
+   .input-group-custom .btn {
+      height: 55px;
+      /* Ejemplo de altura, ajusta según necesites */
+}
+
+
+
+/*Fin Estilos del formulario de crear areas*/
+
+
+/*inicio Estilos de titulos y substitulos*/
+
+.titulos{
+  text-align: center;
+  color: white;
+}
+
+.subtitulos{
+  text-align: center;
+  color: white;
+  font-size: 20px;
+}
+
+/*Fin Estilos de titulos y substitulos*/
+
+.page-section-graficos {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

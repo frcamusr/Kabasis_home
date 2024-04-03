@@ -1,0 +1,142 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated%}
+
+
+{% if datos_admin == "[]" and user.tipo_usuario == "Administrador" or "Administrador Kabasis" %}
+<div class="alert alert-warning" role="alert">
+  Nadie de su organización ha avanzado en el curso.
+</div>
+{% endif %}
+{% if dato_alumno_json == "[]" and user.tipo_usuario == "Alumno" %}
+
+<div class="alert alert-warning" role="alert">
+  Usted no ha iniciado el curso
+</div>
+{% endif %}
+{% else%}
+
+
+<div class="graficoLinea">
+  <canvas id="myHorizontalBarChart"></canvas>
+</div>
+{% endif %}
+
+<div>
+  <button type="button " class="btn btn-primary mx-1 active" id="btnAdmin">Ver grafico Admin</button>
+  <button type="button " class="btn btn-primary mx-1" id="btnAlumno">Ver grafico Alumno</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script>
+  let myChart = null;
+const datos_admin = {{ datos_admin|safe }};
+const labels1 = datos_admin.map(dato => dato[0]); // Nombres de usuario
+const dataNumbers = datos_admin.map(dato => dato[1]); // Porcentajes de avance
+
+
+function graficoAdmin(data){
+  if (myChart !== null) {
+    myChart.destroy();
+  }
+
+
+const ctx = document.getElementById('myHorizontalBarChart').getContext('2d');
+myChart= new Chart(ctx,{
+  type: 'bar',
+  data: data,
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: 100
+      }
+    },
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Promedio Avance de la empresa en el curso'
+      }
+    }
+  }
+})
+}
+
+
+// Primer gráfico
+const average = dataNumbers.length > 0 ? dataNumbers.reduce((acc, curr) => acc + curr, 0) / dataNumbers.length : 0;
+labels1.push('Promedio'); // Agregar "Promedio" al final de las etiquetas
+dataNumbers.push(average); // Agregar el promedio al final de los datos
+
+let data1 = {
+  labels: labels1,
+  datasets: [{
+    label: 'Promedio Avance del Curso (%)',
+    data: dataNumbers,
+    borderColor: 'blue',
+    backgroundColor: dataNumbers.map((_, index) => 
+      index === dataNumbers.length - 1 ? 'blue' : 'rgba(133, 20, 0, 0.7)'), // Azul para el promedio, rojo para los demás
+  }]
+};
+
+
+
+const datoAlumno = JSON.parse('{{ dato_alumno_json|safe }}'.replace(/'/g, '"')); // Convertir la cadena a JSON válido
+
+// Generar etiquetas y datos para el gráfico de barras
+const labels2 = datoAlumno.map((item, index) => 'Unidad ' + (index + 1));
+let dataNumbers2 = datoAlumno.map(item => item[1]);
+
+// Agrega un cálculo para el promedio si es necesario
+const average2 = dataNumbers2.length > 0 ? dataNumbers2.reduce((acc, curr) => acc + curr, 0) / dataNumbers2.length : 0;
+labels2.push('Promedio');
+dataNumbers2.push(average2);
+
+let data2 = {
+  labels: labels2,
+  datasets: [{
+    label: 'Avance por Unidad (%)',
+    data: dataNumbers2,
+    borderColor: 'blue',
+    backgroundColor: dataNumbers2.map((_, index) => 
+      index === dataNumbers2.length - 1 ? 'blue' : 'rgba(133, 20, 0, 0.7)'), // Azul para el promedio, rojo para los demás
+  }]
+};
+
+
+document.getElementById('btnAdmin').addEventListener('click', function() {
+  graficoAdmin(data1);
+});
+document.getElementById('btnAlumno').addEventListener('click', function() {
+  graficoAdmin(data2);
+});
+
+
+
+{% comment %} {% if user.tipo_usuario == "Administrador" or user.tipo_usuario == "Administrador Kabasis" %}
+
+graficoAdmin(data1);
+
+{%endif%}
+{% if user.tipo_usuario == "Alumno" %}
+
+graficoAdmin(data2);
+{%endif%} {% endcomment %}
+graficoAdmin(data1);
+
+
+</script>
+
+
+
+
+{% endblock %}

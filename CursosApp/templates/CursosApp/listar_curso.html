@@ -1,0 +1,86 @@
+{% extends "KabasisWebApp/base.html"%}
+
+{% load static %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+  <div class="container">
+    <h1 style="color: white;" class="text-center">Administrar cursos</h1>
+    <div class="table-responsive">
+
+      <table class="table table-striped table-hover bg-white">
+
+        <thead class="thead-dark">
+
+          <tr>
+
+            <th class="text-center">Nombre</th>
+
+            <th class="text-center">Descrición</th>
+
+            <th class="text-center">Acciones</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for c in cursos %}
+
+          <tr>
+
+            <td class="text-center">{{c.nombre | title}}</td>
+
+            <td class="text-center">{{c.descripcion}}</td>
+
+            <td class="text-center">
+
+              <div class="d-flex justify-content-center">
+
+                <a class="btn btn-primary mr-2" href="{% url 'modificar_curso' c.id %}"
+                  style="height: 38px; line-height: 1;">Editar</a>
+                <a class="btn btn-danger" href="#" onclick="confirmarEliminacion(event, '{{ c.id }}')">Eliminar</a>
+
+
+              </div>
+            </td>
+
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </div>
+    <div class="text-center">
+      <a class="btn btn-primary btn-block" href="{% url 'agregar_curso' %}">Crear curso</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  function confirmarEliminacion(event, id) {
+    event.preventDefault();
+
+    const url = "{% url 'eliminar_curso' 0 %}".replace("0", id);
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el curso. ¿Deseas continuar?',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, eliminar',
+      reverseButtons: true,
+      confirmButtonColor: "#dc3545"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = url;
+      }
+    });
+  }
+</script>
+
+{% endblock %}

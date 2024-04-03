@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container bg-white p-5 rounded">
+        <h2 class="text-center mb-4">Preguntas</h2>
+        {% for pregunta in questions %}
+            <div class="question mb-4">
+                <h5>{{ forloop.counter }}. {{ pregunta.text }}</h5>
+                {% if pregunta.question_type == 'option' %}
+                    <div class="option-fields">
+                        <p>a. {{ pregunta.option_a }}</p>
+                        <p>b. {{ pregunta.option_b }}</p>
+                        <p>c. {{ pregunta.option_c }}</p>
+                        <p>d. {{ pregunta.option_d }}</p>
+                    </div>
+                {% endif %}
+                    <div class="btn-group" role="group" aria-label="Acciones">
+                        <form method="POST" action="{% url 'delete_question' pregunta.id %}" class="mr-2">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                        <form method="POST" action="{% url 'update_question' pregunta.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                        </form>
+                    </div>
+            </div>
+        {% empty %}
+            <p>No hay preguntas</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

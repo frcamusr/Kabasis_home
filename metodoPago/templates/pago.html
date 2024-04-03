@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi Proyecto</title>
+    <!-- SDK de Mercado Pago -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+    <h1>Prueba</h1>
+
+    <!-- Contenedor para el botón de pago -->
+    <div id="payment-button"></div>
+
+    <script>
+        // Inicialización del SDK de Mercado Pago con tu clave pública
+        const mp = new MercadoPago('TEST-fa216a1b-c780-44ef-aff7-0bf4eaa79eb4');
+
+        // Creación del botón de pago
+        mp.bricks().create("wallet", "payment-button", {
+            initialization: {
+                preferenceId: "{{ preference.id }}",  // Utiliza el ID de preferencia desde el back-end
+            },
+        });
+    </script>
+</body>
+</html>

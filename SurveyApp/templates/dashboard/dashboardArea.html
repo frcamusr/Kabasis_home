@@ -1,0 +1,69 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+
+
+
+<div class="graficoLinea">
+<canvas id="myHorizontalBarChart" ></canvas>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script>
+
+const datosArea = {{infoAreas|safe}}
+const labels = datosArea.map(dato => dato[0]);
+const dataNumbers = datosArea.map(dato => dato[1]);
+
+
+
+
+function grafico(data){
+  const ctx = document.getElementById('myHorizontalBarChart').getContext('2d');
+  myChart = new Chart(ctx,{
+    type: 'bar',
+    data: data,
+    options: {
+      indexAxis: 'y', // Cambia el eje de las barras a horizontal
+      scales: {
+        x: { // Cambia 'xAxes' a 'x' para Chart.js v3+
+          beginAtZero: true, // Comienza en cero
+          max: 100 // Termina en 100
+        }
+      },
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Promedio Avance de la empresa en el curso'
+        }
+      }
+    }
+  })
+}
+let data1 = {
+  labels: labels,
+  datasets: [{
+    label: 'Promedio Avance del Curso (%)',
+    data: dataNumbers,
+    backgroundColor: 'blue', // Añadir color de fondo para las barras
+    borderColor: 'blue',    
+  }]
+};
+
+
+
+
+grafico(data1)
+</script>
+
+
+
+
+
+{% endblock %}

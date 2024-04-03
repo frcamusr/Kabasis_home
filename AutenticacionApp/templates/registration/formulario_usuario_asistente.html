@@ -1,0 +1,39 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+
+          <div>
+            <a href="{% url 'lista_usuarios_personalizados_asistentes' %}" class="btn btn-primary fas fa-arrow-left">&nbsp;&nbsp; Administrar usuarios</a>
+          </div>
+            <br>  
+          <h1 style="text-align: center;" class="card-title">Formulario para crear un Usuario Asistente Administrador</h1>
+
+          <p class="text-center">Ingresa a los usuarios Asistentes Administrador que tendrán los mismos privilegios que los usuarios Administradores</p>
+
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formulario|crispy }}
+
+            <!-- Envuelve el botón en un div para centrarlo verticalmente -->
+            <div class="text-center">
+              <button type="submit" class="btn btn-success btn-lg btn-block">Guardar</button>
+            </div>
+          </form>
+          
+          <!-- ... (código posterior) ... -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+{% endblock %}

@@ -1,0 +1,197 @@
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Inicio</title>
+        {% load static %}
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Fonts -->
+        <script src="https://kit.fontawesome.com/02f5314609.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+
+        <!-- Styles -->
+        <link href="{% static 'KabasisWebApp\css\gestion.css' %}" rel="stylesheet">
+
+
+        
+        {% block extra_styles %}{% endblock extra_styles %}
+
+    </head>
+
+    <body>
+        <div>
+            <img src="{% static 'KabasisWebApp/img/kabasis_negro_logo1.png' %}" alt="Imagen de Kabasis" class="imagen-kabasis text-center" style="max-width: 200px; height: auto";>
+        </div>
+
+        <div style="text-align: right; margin-right: 100px; color: white;">
+
+            {% if user.is_authenticated %}
+        
+                {% if user.tipo_usuario == 'Administrador Kabasis' or user.tipo_usuario == 'Administrador' or user.tipo_usuario == 'Alumno' or user.tipo_usuario == 'Asistente Administrativo' or formulario_completado %}
+                    <li class="d-inline ml-4" style="list-style-type: none;">
+                        <a href="{% url 'view_profile' %}" style="color: white;">@{{ user.username }}</a>
+                    </li>
+                {% endif %}
+        
+                <li class="d-inline ml-4" style="list-style-type: none;">
+                    <a href="{% url 'logout' %}" style="color: white;">Cerrar sesión</a>
+                </li>
+                
+            {% else %}
+                <li class="d-inline ml-4" style="list-style-type: none;">
+                    <a href="{% url 'login' %}" style="color: white;">Iniciar sesión</a>
+                </li>
+        
+                <li class="d-inline ml-4" style="list-style-type: none;">
+                    <a href="{% url 'registro' %}" style="color: white;">Registrarse</a>
+                </li>
+        
+            {% endif %}
+        </div>
+        
+
+        <!-- Navbar -->
+        {% if user.tipo_usuario != "Alumno" %}
+        <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="{% url 'Home' %}">Kabasis</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item {% if request.path == '/' %} active{% endif %} px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="{% url 'Home' %}">Inicio</a>
+                        </li>
+                        <!--Solo si esta autenticado y si es usuario Administrador y Administrador Kabasis puede ver el link-->
+                        {% if user.is_authenticated %}
+                            {% if user.tipo_usuario == "Administrador" or user.tipo_usuario == "Administrador Kabasis" %}
+                                <li class="nav-item {% if request.path == '/autenticacion/menu_administracion/'%}active{% endif %} px-lg-4">
+                                    <a class="nav-link text-uppercase text-expanded" href="{% url 'menu_administracion' %}">Administración</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        <!--url que me llevaba a la vista que me muestra los cursos en el sistema -->
+                        <!--<li class="nav-item {% if request.path == '/cursos' %} active{% endif %} px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="{% url 'Cursos' %}">Cursos</a>
+                        </li>-->
+                        <li class="nav-item {% if request.path == '/cursos/ver_curso/1/' %} active{% endif %} px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="{% url 'ver_curso' id=1 %}">Curso</a>
+                        </li>
+                        <li class="nav-item {% if request.path == '/contacto/' %} active{% endif %} px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="{% url 'Contacto' %}">Contacto</a>
+                        </li>
+                        <!--<li class="nav-item {% if request.path == '/editContenido' %} active{% endif %} px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="{% url 'editContenido' %}">Editor de Contenido</a>
+                        </li>-->
+                        <li class="nav-item {% if request.path == '/blog/' %} active{% endif %} px-lg-4">
+                            <a class="nav-link text-uppercase text-expanded" href="{% url 'Blog' %}">Blog</a>
+                        </li>
+                        <li class="nav-item dropdown px-lg-4">
+                            <a class="nav-link dropdown-toggle text-uppercase text-expanded" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Dashboard
+                              </a>
+                              <ul class="dropdown-menu">
+                                  <li>
+                                      <a class="dropdown-item" style="color:gray;" href="{% url 'dashboardEmpresa' %}">Avance Empresa</a>
+                                  </li>
+                                  <li>
+                                      <a class="dropdown-item" style="color:gray;" href="{% url 'dashboardArea' %}" >Avance Area</a>
+                                  </li>
+                                  <li>
+                                      <a  class="dropdown-item" style="color:gray;" href="{% url 'dashboardAlumno' %}">Avance Alumno</a>
+                                  </li>                            
+                                  <li>
+                                      <a  class="dropdown-item" style="color:gray;" href="{% url 'dashboardSurvey' %}">Resultado inicial</a>
+                                  </li>                            
+                                  <li>
+                                      <a  class="dropdown-item" style="color:gray;" href="{% url 'dashboardDetalle' %}">Detalle Alumnos</a>
+                                  </li>                            
+                              </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>}
+        {% endif %}
+
+        {% block content%}
+
+        {% endblock %}
+
+        {% block footer %}
+
+        
+        <!-- Footer -->
+        <footer class="footer text-faded text-center py-5">
+
+            <div class="container" >
+
+                <p class="m-0">
+                    <a href="#" class="link">
+                        <span class="fa-stack fa-lg">
+                            <i class="fab fa-twitter fa-stack-2x" style="color: #ffffff;"></i>
+                        </span>
+                    </a>
+                    <a href="#" class="link">
+                        <span class="fa-stack fa-lg">
+                            <i class="fab fa-facebook fa-stack-2x" style="color: #ffffff;"></i>
+                        </span>
+                    </a>
+                    <a href="#" class="link">
+                        <span class="fa-stack fa-lg">
+                            <i class="fab fa-instagram fa-stack-2x" style="color: #ffffff;"></i>
+                        </span>
+                    </a>
+                </p>
+
+                <p class="m-0 mbt">
+                    <a href="sample.html" class="link">Política de privacidad</a> ·
+                    <a href="sample.html" class="link">Aviso legal</a> ·
+                    <a href="sample.html" class="link">Cookies</a>
+                </p>
+
+                <p class="m-0 mbt1">&copy; Kabasis 2023</p>
+
+            </div>
+
+        </footer>
+        {% endblock footer %}
+
+
+        <!-- Bootstrap -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+        <!--swift alert2-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+            </script>
+
+
+
+        {% if messages %}
+
+        {% for m in messages%}
+        <script>
+            Swal.fire({
+                "title": "Felicitaciones",
+                "text": "{{ m }}",
+                "icon": "success"
+            });
+        </script>
+        {% endfor %}
+
+        {% endif %}
+
+    </body>
+
+</html>

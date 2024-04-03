@@ -1,0 +1,74 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% block content %}
+<section class="page-section cta" style="margin-top: 40px; margin-bottom: 40px;">
+    <div class="container" style="text-align: center;">
+        <h1 style="color: white;">Video relacionado a la unidad</h1>
+        <div>
+            <h2 style="color: white; margin-top: 40px;">{{ video.titulo }}</h2>
+            <p style="color: white;">{{ video.descripcion }}</p>
+            <div class="video-container">
+                {% if video.video_url %}
+                    <!-- Video de YouTube -->
+                    <iframe id="youtube-player" width="600" height="425" src="{{ video.get_embedded_url }}?enablejsapi=1" frameborder="0" allowfullscreen
+                        style="width: 100%; height: 100%; border: 4px solid white; padding: 2rem; color: white;"></iframe>
+                {% else %}
+                    <!-- Video subido directamente -->
+                    <video width="600" height="425" controls style="width: 100%; height: 100%; border: 4px solid white; padding: 2rem; color: white;">
+                        <source src="{{ video.archivo_video.url }}" type="video/mp4">
+                        Tu navegador no soporta videos HTML5.
+                    </video>
+                {% endif %}
+            </div>
+            <div class="col-md-12 mt-2 d-flex justify-content-center">
+                <a class="btn btn-secondary" href="{% url 'ver_curso' id=1 %}" >Volver a la ruta de aprendizaje</a>
+            </div>
+            
+        </div>
+
+</div>
+    </div>
+</section>
+
+{% if video.video_url %}
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player', {
+            events: {
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+            videoWatched();
+        }
+    }
+
+    function videoWatched() {
+        // Asegúrate de modificar la URL para que coincida con tu enrutamiento en Django
+        var postUrl = '/cursos/actualizar-progreso/'; // Esta es la URL definida en Django
+        var videoId = '{{ video.id }}'; // Asumiendo que tienes el ID del video en tu contexto
+
+        $.ajax({
+            url: postUrl,
+            method: 'POST',
+            data: {
+                'video_id': videoId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                console.log('Progreso actualizado:', response);
+            },
+            error: function(error) {
+                console.error('Error al actualizar el progreso:', error);
+            }
+        });
+    }
+</script>
+{% endif %}
+{% endblock %}

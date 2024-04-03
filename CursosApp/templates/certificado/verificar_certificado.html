@@ -1,0 +1,26 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h1 class="text-center">Verificación de Certificado</h1>
+        </div>
+        <div class="card-body">
+            {% if usuario %}
+            <!-- Solo se muestra si 'usuario' está presente en el contexto -->
+            <h3 class="card-title">Certificado Vigente</h3>
+            <p class="card-text">El certificado de <strong>{{ usuario.first_name }} {{ usuario.last_name }}</strong>, con RUT <strong>{{ usuario.rut }}</strong>, sigue vigente.</p>
+            {% else %}
+            <!-- Se muestra si 'usuario' no está presente, implicando que el certificado no es válido o no se encontró el usuario -->
+            <h3 class="card-title">Certificado No Válido</h3>
+            <p class="card-text">{{ mensaje }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

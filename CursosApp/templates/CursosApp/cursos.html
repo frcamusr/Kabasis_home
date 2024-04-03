@@ -1,0 +1,57 @@
+{% extends "KabasisWebApp/base.html"%}
+
+{% load static %}
+
+
+{% block content%}
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px; ">
+    <div class="container">
+        <h1 style="text-align: center; color: white;">Cursos</h1>
+
+
+        <div class="container">
+            <div class="text-center">
+                <a class="btn btn-primary btn-block" href="{% url 'listar_curso' %}">Administrar cursos</a>
+            </div>
+
+            <div class="row">
+
+                {% for curso in cursos %}
+
+                <div class="col-md-3">
+
+                    <div class="card" style="margin: 20px 0px 0px 0px; height: 420px;">
+
+                        <img src="{{curso.imagen.url}}" alt="imagen" style="width: 100%; height: 150px;">
+
+
+                        <div class="card-body kabasis-color" style="text-align: center; width: 100%; height: 130px; color: white;">
+
+                            <h5 class="card-title">{{curso.nombre}}.</h5>
+
+                            <p class="card-text">{{ curso.descripcion}}.</p>
+
+                        </div>
+
+                        <div class="card-footer text-center kabasis-color" >
+
+                            <a href="{% url 'ver_curso' curso.id %}" class="btn btn-primary">Ver curso</a>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

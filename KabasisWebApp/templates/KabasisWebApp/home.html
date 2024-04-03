@@ -1,0 +1,92 @@
+{% extends "KabasisWebApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+</head>
+
+
+  <!-- Heading -->
+  <section class="page-section clearfix" style="margin-top: 80px; margin-bottom: 80px;">
+    <div class="container">
+      <div class="intro">
+        <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{% static 'KabasisWebApp/img/cibercandado.png' %}" alt="">
+        <div class="intro-text left-0 text-center bg-faded p-5 rounded" style="background-image: linear-gradient(to top, rgba(150, 0, 0, 0.6), #123989, #296FFA, rgba(150, 0, 0, 0.6)); color: white;">
+          <h2 class="section-heading mb-4" >
+            <span class="section-heading-lower">¿Qué es KABASIS?</span>
+          </h2>
+          <p class="mb-3">KABASIS es una herramienta diseñada para mejorar la ciberseguridad en las organizaciones, relativo a las vulnerabilidades a las que están expuestos sus colaboradores. Se basa en el enfoque KAB (Conocimiento, Actitudes y Comportamiento) en concordancia y correspondencia a las buenas prácticas de seguridad de la información. Utiliza una evaluación en línea y reporte gerencial que permite la temprana y oportuna toma de decisiones que permiten enfrentar las vulnerabilidades a las que están expuestos sus colaboradores y construir el «Human Firewall» de la organización.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Message -->
+  <section class="page-section cta">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <div class="text-center rounded" style="border: 4px solid white; padding: 2rem; color: white;">
+            <h2 class="section-heading mb-4">
+              <span class="section-heading-lower">¿QUÉ MIDE KABASIS?</span>
+            </h2>
+            <p class="mb-0">Mide el nivel de riesgo de sus colaboradores de ser víctimas de ciberataques que afecten a su organización.</p>
+
+            <div class="video-container">
+              <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/bOXQGr6WLUw" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <br><br>
+    <div class="container"> 
+      <div class="row">
+        <div class="text-center rounded" style="padding: 2rem; color: white; margin-top: -50px;">
+          <h2 class="section-heading mb-4">
+            <div>
+              <img src="{% static 'KabasisWebApp/img/kabasis_negro_logo1.png' %}" alt="Imagen de Kabasis" class="text-center img-fluid" style="max-width: 180px; height: auto;">
+            </div>
+            <h1 class="mb-0">La Triada KAB</h1>
+          </h2>
+          <br>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="icon text-center">
+                <img src="{% static 'KabasisWebApp/img/lampara.png' %}" alt="Icono 1" class="img-fluid" style="max-width: 120px; height: auto;">
+                <br><br>
+                <h5>CONOCIMIENTO</h5>
+                <p>Conocimiento sobre aspectos claves de la Seguridad de la Información.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="icon text-center">
+                <img src="{% static 'KabasisWebApp/img/cara-sonriente.png' %}" alt="Icono 2" class="img-fluid" style="max-width: 120px; height: auto;">
+                <br><br>
+                <h5>ACTITUDES</h5>
+                <p>Actitudes y percepciones hacia la Seguridad de la Información en su organización.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="icon text-center">
+                <img src="{% static 'KabasisWebApp/img/cerebro.png' %}" alt="Icono 3" class="img-fluid" style="max-width: 120px; height: auto;">
+                <br><br>
+                <h5>CONDUCTA</h5>
+                <p>Auto-reporte conductual frente a temas asociados a Seguridad de la Información.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

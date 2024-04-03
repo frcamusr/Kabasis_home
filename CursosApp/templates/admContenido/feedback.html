@@ -1,0 +1,47 @@
+{% extends "KabasisWebApp/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                {% if quiz_progreso.aprobado %}
+                <div class="card-header bg-success text-white justify-content-center text-center">
+                    <h2 class="mb-0">Resultados del Quiz : {{ quiz_progreso.porcentaje }} %</h2>
+                    <p>¡Felicitaciones!</p>
+                </div>
+                    {% else %}
+                    <div class="card-header bg-warning text-white justify-content-center text-center">
+                        <h2 class="mb-0">Resultados del Quiz : {{ quiz_progreso.porcentaje }} %</h2>
+                        <p>No ha superado el puntaje minimo</p>
+                    </div>
+                    {% endif%}
+                <div class="card-body">
+                    <h4 class="card-title">Revisión de Respuestas</h4>
+                    {% for question in questions %}
+                        <p><strong>Pregunta:</strong> {{ question.text }}</p>
+                        {% for respuesta in respuestas %}
+                            {% if respuesta.question.id == question.id %}
+                                <p><strong>Tu Respuesta:</strong> {{ respuesta.option_answer }}
+                                {% if respuesta.option_answer == question.correct_answer %}
+                                    <span class="text-success"> <strong> ----- Respuesta Correcta </strong> </span> </p>
+                                {% else %}
+                                    <span class="text-danger"> <strong>  ----- Respuesta Incorrecta </strong> </span>  </p>
+                                {% endif %}
+                            <p><strong>Explicación</strong></p>
+                            {{ question.explicacion_correct }}        
+                            {% endif %}
+                        {% endfor %}
+                        <hr>
+                    {% endfor %}
+
+                </div>
+            </div>
+            <div class="col-md-12 mt-2 d-flex justify-content-center">
+                <a class="btn btn-secondary" href="{% url 'ver_curso' id=1 %}" >Volver a la ruta de aprendizaje</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

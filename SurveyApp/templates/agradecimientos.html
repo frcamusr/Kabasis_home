@@ -1,0 +1,60 @@
+{% extends 'KabasisWebApp/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Pie Chart</title>
+</head>
+<body>
+  <div class="grafico">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const ctx = document.getElementById('myChart');
+
+    // Replace with your desired data values and labels
+    const data = {
+      labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+      datasets: [{
+        label: 'My Dataset',
+        data: [12, 19, 3, 5, 2], // Replace with your data
+        backgroundColor: [
+          'red',
+          'orange',
+          'yellow',
+          'green',
+          'blue'
+        ], // Or customize colors here
+      }]
+    };
+
+    const config = {
+      type: 'pie',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: 'Pie Chart'
+          }
+        }
+      }
+    };
+
+    new Chart(ctx, config);
+  </script>
+
+</body>
+</html>
+{% endblock %}

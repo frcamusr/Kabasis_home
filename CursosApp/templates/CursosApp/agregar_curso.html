@@ -1,0 +1,47 @@
+{% extends "KabasisWebApp/base.html"%}
+
+{% load static %}
+
+{% block content%}
+
+<section class="page-section cta" style="margin-top: 30px; margin-bottom: 30px;">
+
+   <div class="row">
+
+      <div class="col-12 col-md-6 offset-md-3">
+
+         <div class="card">
+
+            <div class="card-body">
+
+               <div class="text-center">
+                  <a class="btn btn-info fas fa-arrow-left d-flex float-left"
+                     href="{% url 'listar_curso' %}">&nbsp;Atrás</a>
+               </div>
+
+               <h2 class="text-center" style="margin-right: 90px">Crear curso</h2>
+
+               <form action="" method="post" class="my-3" enctype="multipart/form-data">
+                  <!-- Agregar una clase 'my-3' para ajustar el margen vertical -->
+                  {% csrf_token %}
+                  {{ form }}
+                  <div class="d-flex justify-content-center my-3">
+                     <!-- Agregar una clase 'my-3' para ajustar el margen vertical -->
+                     <input type="reset" value="Limpiar" class="btn btn-secondary mx-2">
+                     <input type="submit" value="Guardar" class="btn btn-primary mx-2">
+                  </div>
+               </form>
+               {{mensaje}}
+
+
+            </div>
+
+         </div>
+
+      </div>
+
+   </div>
+</section>
+
+
+{% endblock %}
